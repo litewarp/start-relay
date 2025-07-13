@@ -1,12 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router'
-export const Route = createFileRoute('/')({
-  component: Home,
-})
+import { createFileRoute, Link } from "@tanstack/react-router";
+export const Route = createFileRoute("/")({
+	component: Home,
+});
 
 function Home() {
-  return (
-    <div className="p-2">
-      <h3>Welcome Home!!!</h3>
-    </div>
-  )
+	return (
+		<div className="flex flex-col p-8 gap-y-2">
+			<h1 className="text-2xl font-bold">Tanstack Start Relay Integration</h1>
+			<p>
+				Navigate to{" "}
+				<Link className="text-blue-500 hover:underline" to="/relay">
+					/relay
+				</Link>{" "}
+				to explore the integration.
+			</p>
+		</div>
+	);
 }

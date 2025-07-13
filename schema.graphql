@@ -1,0 +1,36 @@
+schema {
+  query: Query
+}
+
+"""
+Directs the executor to defer this fragment when the `if` argument is true or undefined.
+"""
+directive @defer(
+  """Deferred when true or undefined."""
+  if: Boolean!
+  """Unique name"""
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"""
+Directs the executor to stream plural fields when the `if` argument is true or undefined.
+"""
+directive @stream(
+  """Stream when true or undefined."""
+  if: Boolean!
+  """Number of items to return immediately"""
+  initialCount: Int
+  """Unique name"""
+  label: String
+) on FIELD
+
+type Letter {
+  id: ID!
+  value: String!
+}
+
+type Query {
+  alphabet: [Letter!]!
+  fastField: String!
+  slowField(waitFor: Int!): String
+}
