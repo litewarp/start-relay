@@ -1,0 +1,9 @@
+schema {
+  query: Query
+}
+
+type Query {
+  alphabet: [String!]!
+  fastField: String!
+  slowField(waitFor: Int! = 5000): String
+}

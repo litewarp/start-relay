@@ -27,6 +27,7 @@ import { Route as PathlessLayoutNestedLayoutRouteBRouteImport } from './routes/_
 import { Route as PathlessLayoutNestedLayoutRouteARouteImport } from './routes/_pathlessLayout/_nested-layout/route-a'
 import { ServerRoute as CustomScriptDotjsServerRouteImport } from './routes/customScript[.]js'
 import { ServerRoute as ApiUsersServerRouteImport } from './routes/api/users'
+import { ServerRoute as ApiGraphqlServerRouteImport } from './routes/api/graphql'
 import { ServerRoute as ApiUsersUserIdServerRouteImport } from './routes/api/users.$userId'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -110,6 +111,11 @@ const CustomScriptDotjsServerRoute = CustomScriptDotjsServerRouteImport.update({
 const ApiUsersServerRoute = ApiUsersServerRouteImport.update({
   id: '/api/users',
   path: '/api/users',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiGraphqlServerRoute = ApiGraphqlServerRouteImport.update({
+  id: '/api/graphql',
+  path: '/api/graphql',
   getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiUsersUserIdServerRoute = ApiUsersUserIdServerRouteImport.update({
@@ -217,30 +223,43 @@ export interface RootRouteChildren {
 }
 export interface FileServerRoutesByFullPath {
   '/customScript.js': typeof CustomScriptDotjsServerRoute
+  '/api/graphql': typeof ApiGraphqlServerRoute
   '/api/users': typeof ApiUsersServerRouteWithChildren
   '/api/users/$userId': typeof ApiUsersUserIdServerRoute
 }
 export interface FileServerRoutesByTo {
   '/customScript.js': typeof CustomScriptDotjsServerRoute
+  '/api/graphql': typeof ApiGraphqlServerRoute
   '/api/users': typeof ApiUsersServerRouteWithChildren
   '/api/users/$userId': typeof ApiUsersUserIdServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/customScript.js': typeof CustomScriptDotjsServerRoute
+  '/api/graphql': typeof ApiGraphqlServerRoute
   '/api/users': typeof ApiUsersServerRouteWithChildren
   '/api/users/$userId': typeof ApiUsersUserIdServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/customScript.js' | '/api/users' | '/api/users/$userId'
+  fullPaths:
+    | '/customScript.js'
+    | '/api/graphql'
+    | '/api/users'
+    | '/api/users/$userId'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/customScript.js' | '/api/users' | '/api/users/$userId'
-  id: '__root__' | '/customScript.js' | '/api/users' | '/api/users/$userId'
+  to: '/customScript.js' | '/api/graphql' | '/api/users' | '/api/users/$userId'
+  id:
+    | '__root__'
+    | '/customScript.js'
+    | '/api/graphql'
+    | '/api/users'
+    | '/api/users/$userId'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   CustomScriptDotjsServerRoute: typeof CustomScriptDotjsServerRoute
+  ApiGraphqlServerRoute: typeof ApiGraphqlServerRoute
   ApiUsersServerRoute: typeof ApiUsersServerRouteWithChildren
 }
 
@@ -362,6 +381,13 @@ declare module '@tanstack/react-start/server' {
       preLoaderRoute: typeof ApiUsersServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
+    '/api/graphql': {
+      id: '/api/graphql'
+      path: '/api/graphql'
+      fullPath: '/api/graphql'
+      preLoaderRoute: typeof ApiGraphqlServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/users/$userId': {
       id: '/api/users/$userId'
       path: '/$userId'
@@ -452,6 +478,7 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
   CustomScriptDotjsServerRoute: CustomScriptDotjsServerRoute,
+  ApiGraphqlServerRoute: ApiGraphqlServerRoute,
   ApiUsersServerRoute: ApiUsersServerRouteWithChildren,
 }
 export const serverRouteTree = rootServerRouteImport

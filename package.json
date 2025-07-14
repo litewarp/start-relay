@@ -1,40 +1,46 @@
 {
-  "name": "tanstack-start-example-basic",
-  "private": true,
-  "sideEffects": false,
-  "type": "module",
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build && tsc --noEmit",
-    "start": "node .output/server/index.mjs"
-  },
-  "dependencies": {
-    "@graphql-yoga/plugin-defer-stream": "^3.15.1",
-    "@tanstack/react-router": "^1.127.3",
-    "@tanstack/react-router-devtools": "^1.127.3",
-    "@tanstack/react-start": "^1.127.7",
-    "graphql": "^16.11.0",
-    "graphql-yoga": "^5.15.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-relay": "^20.0.0",
-    "relay-compiler": "^20.0.0",
-    "relay-runtime": "^20.0.0",
-    "tailwind-merge": "^2.6.0",
-    "zod": "^3.24.2"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.1.1",
-    "@types/node": "^22.5.4",
-    "@types/react": "^19.0.8",
-    "@types/react-dom": "^19.0.3",
-    "@vitejs/plugin-react": "^4.6.0",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.1",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2",
-    "vite": "^6.3.5",
-    "vite-plugin-relay": "^2.1.0",
-    "vite-tsconfig-paths": "^5.1.4"
-  }
+	"name": "tanstack-start-example-basic",
+	"private": true,
+	"sideEffects": false,
+	"type": "module",
+	"scripts": {
+		"dev:vite": "vite dev",
+		"dev": "concurrently \"pnpm dev:vite\" \"pnpm relay\"",
+		"build": "vite build && tsc --noEmit",
+		"codegen": "graphql-codegen-esm --config graphql.codegen.ts",
+		"relay": "relay-compiler --watch",
+		"start": "node .output/server/index.mjs"
+	},
+	"dependencies": {
+		"@graphql-yoga/plugin-defer-stream": "^3.15.1",
+		"@tanstack/react-router": "^1.127.3",
+		"@tanstack/react-router-devtools": "^1.127.3",
+		"@tanstack/react-start": "^1.127.7",
+		"graphql": "^16.11.0",
+		"graphql-yoga": "^5.15.1",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-relay": "^20.0.0",
+		"relay-compiler": "^20.0.0",
+		"relay-runtime": "^20.0.0",
+		"tailwind-merge": "^2.6.0",
+		"zod": "^3.24.2"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.1.1",
+		"@graphql-codegen/cli": "^5.0.7",
+		"@graphql-codegen/schema-ast": "^4.1.0",
+		"@types/node": "^22.5.4",
+		"@types/react": "^19.0.8",
+		"@types/react-dom": "^19.0.3",
+		"@vitejs/plugin-react": "^4.6.0",
+		"autoprefixer": "^10.4.20",
+		"babel-plugin-relay": "^20.0.0",
+		"concurrently": "^9.2.0",
+		"postcss": "^8.5.1",
+		"tailwindcss": "^3.4.17",
+		"typescript": "^5.7.2",
+		"vite": "^6.3.5",
+		"vite-tsconfig-paths": "^5.1.4"
+	}
 }
