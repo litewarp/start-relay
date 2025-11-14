@@ -11,9 +11,10 @@ import { multipartFetch } from "../fetch-multipart/index.ts";
 export const fetchFn: FetchFunction = (
 	request: RequestParameters,
 	variables: Variables,
-	_cacheConfig: CacheConfig,
+	cacheConfig: CacheConfig,
 	_uploadables?: UploadableMap | null,
 ) => {
+	const { metadata } = cacheConfig;
 	return Observable.create((sink) => {
 		multipartFetch("/api/graphql", {
 			method: "POST",
@@ -26,9 +27,10 @@ export const fetchFn: FetchFunction = (
 				variables,
 			}),
 			credentials: "include",
+			signal: metadata?.signal instanceof AbortSignal ? metadata.signal : undefined,
 			// @ts-expect-error graphqlStuff
 			onNext: (parts) => sink.next(parts),
-			onError: (err) => sink.error(err instanceof Error ? err : new Error(`Unknown error: ${err}`)),
+			onError: (err) => sink.error(err instanceof Error ? err : new Error(`Unknown error: $err`)),
 			onComplete: () => sink.complete(),
 		});
 	});

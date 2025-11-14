@@ -42,6 +42,7 @@ export function multipartFetch<T extends ExecutionResult | ExperimentalIncrement
 		headers?: Record<string, string>;
 		credentials?: RequestCredentials;
 		body?: string;
+		signal?: AbortSignal;
 		onNext: (patch: T[], options: { responseHeaders: Headers }) => void;
 		onComplete: () => void;
 		onError: (error: HttpError) => void;
