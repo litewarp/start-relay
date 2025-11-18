@@ -21,8 +21,9 @@ export const yoga = createYoga({
 	graphiql: true,
 	graphqlEndpoint: "/api/graphql",
 	fetchAPI: { Response },
-	// biome-ignore lint/correctness/useHookAtTopLevel: <explanation>
+	// biome-ignore lint/correctness/useHookAtTopLevel: turtle
 	plugins: [useDeferStream()],
+	logging: "debug",
 	schema: createSchema({
 		typeDefs,
 		resolvers: {

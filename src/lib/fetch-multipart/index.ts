@@ -1,4 +1,3 @@
-import type { ExecutionResult, ExperimentalIncrementalExecutionResults } from "graphql";
 import { PatchResolver } from "./patch-resolver.ts";
 
 function getBoundary(contentType = "") {
@@ -35,14 +34,9 @@ export class HttpError extends Error {
 	}
 }
 
-export function multipartFetch<T extends ExecutionResult | ExperimentalIncrementalExecutionResults>(
+export function multipartFetch<T extends object>(
 	url: string,
-	options: {
-		method?: string;
-		headers?: Record<string, string>;
-		credentials?: RequestCredentials;
-		body?: string;
-		signal?: AbortSignal;
+	options: Pick<RequestInit, "method" | "headers" | "credentials" | "body" | "signal"> & {
 		onNext: (patch: T[], options: { responseHeaders: Headers }) => void;
 		onComplete: () => void;
 		onError: (error: HttpError) => void;

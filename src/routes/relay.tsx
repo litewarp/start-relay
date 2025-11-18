@@ -14,14 +14,21 @@ const query = graphql`
   `;
 
 export const Route = createFileRoute("/relay")({
-	loader: ({ context }) => {
-		context.preloadQuery(node, {});
+	loader: async ({ context }) => {
+		await context.preloadQuery(node, {});
 	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const data = useLazyLoadQuery<relayPageQuery>(query, {});
+	const data = useLazyLoadQuery<relayPageQuery>(
+		query,
+		{},
+		{
+			fetchPolicy: "store-or-network",
+			UNSTABLE_renderPolicy: "partial",
+		},
+	);
 
 	return (
 		<div className="flex flex-col p-8 gap-y-2">
