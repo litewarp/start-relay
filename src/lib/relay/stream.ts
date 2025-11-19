@@ -1,14 +1,14 @@
-export interface PushableStream {
+export interface PushableStream<T> {
 	stream: ReadableStream;
-	enqueue: (chunk: unknown) => void;
+	enqueue: (chunk: T) => void;
 	close: () => void;
 	isClosed: () => boolean;
-	error: (err: unknown) => void;
+	error: (err: Error) => void;
 }
 
-export function createPushableStream(): PushableStream {
-	let controllerRef: ReadableStreamDefaultController;
-	const stream = new ReadableStream({
+export function createPushableStream<T>(): PushableStream<T> {
+	let controllerRef: ReadableStreamDefaultController<T>;
+	const stream = new ReadableStream<T>({
 		start(controller) {
 			controllerRef = controller;
 		},
@@ -17,7 +17,9 @@ export function createPushableStream(): PushableStream {
 
 	return {
 		stream,
-		enqueue: (chunk) => controllerRef.enqueue(chunk),
+		enqueue: (chunk) => {
+			controllerRef.enqueue(chunk);
+		},
 		close: () => {
 			controllerRef.close();
 			_isClosed = true;

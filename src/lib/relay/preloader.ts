@@ -1,58 +1,32 @@
-import relay, { type Environment, type PreloadedQuery } from "react-relay";
-import type {
-	GraphQLTaggedNode,
-	OperationType,
-	PreloadableConcreteRequest,
-	VariablesOf,
+import type { Environment, GraphQLTaggedNode } from "react-relay";
+import relay from "react-relay";
+import runtime, {
+	type CacheConfig,
+	type OperationType,
+	type RequestParameters,
+	type VariablesOf,
 } from "relay-runtime";
+
+const { loadQuery } = relay;
+const { getRequest } = runtime;
+
+export interface SerializablePreloadedQuery<TQuery extends OperationType> {
+	params: RequestParameters;
+	variables: VariablesOf<TQuery>;
+	response: TQuery["response"];
+}
 
 export const createPreloader = (environment: Environment) => {
 	const preloadQuery = <TQuery extends OperationType>(
-		preloadableRequest: GraphQLTaggedNode | PreloadableConcreteRequest<TQuery>,
+		node: GraphQLTaggedNode,
 		variables: VariablesOf<TQuery>,
-		signal?: AbortSignal,
-	): PreloadedQuery<TQuery, Record<string, unknown>> => {
-		return relay.loadQuery(
-			environment,
-			preloadableRequest,
-			variables,
-			{
-				fetchPolicy: "store-and-network",
-			},
-			{
-				cacheConfig: {
-					metadata: {
-						signal,
-					},
-				},
-			},
-		);
+		networkCacheConfig?: CacheConfig,
+	) => {
+		return loadQuery<TQuery>(environment, getRequest(node), variables, {
+			fetchPolicy: "store-or-network",
+			...networkCacheConfig,
+		});
 	};
+
 	return preloadQuery;
 };
-
-export async function preloadRelayQuery<
-	TQuery extends OperationType,
-	TEnv extends Environment,
->(
-	environment: TEnv,
-	preloadableRequest: GraphQLTaggedNode | PreloadableConcreteRequest<TQuery>,
-	variables: VariablesOf<TQuery>,
-	signal?: AbortSignal,
-): Promise<PreloadedQuery<TQuery, Record<string, unknown>>> {
-	return relay.loadQuery(
-		environment,
-		preloadableRequest,
-		variables,
-		{
-			fetchPolicy: "store-and-network",
-		},
-		{
-			cacheConfig: {
-				metadata: {
-					signal,
-				},
-			},
-		},
-	);
-}
