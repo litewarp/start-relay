@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7984f50a302fb5b5266d03a85fba2c70>>
+ * @generated SignedSource<<4f255f194f3159ae11cafb6e5d64a0eb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,7 @@
 import type { ReaderFragment } from 'relay-runtime';
 import type { FragmentRefs } from "relay-runtime";
 export type relayFragment$data = {
-  readonly slowField: string | null | undefined;
+  readonly slowField: string;
   readonly " $fragmentType": "relayFragment";
 };
 export type relayFragment$key = {

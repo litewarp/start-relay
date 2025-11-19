@@ -30,6 +30,9 @@ importers:
       graphql:
         specifier: 17.0.0-alpha.9
         version: 17.0.0-alpha.9
+      graphql-relay:
+        specifier: ^0.10.2
+        version: 0.10.2(graphql@17.0.0-alpha.9)
       graphql-yoga:
         specifier: ^5.16.2
         version: 5.16.2(graphql@17.0.0-alpha.9)
@@ -1847,6 +1850,12 @@ packages:
     peerDependenciesMeta:
       cosmiconfig-toml-loader:
         optional: true
+
+  graphql-relay@0.10.2:
+    resolution: {integrity: sha512-abybva1hmlNt7Y9pMpAzHuFnM2Mme/a2Usd8S4X27fNteLGRAECMYfhmsrpZFvGn3BhmBZugMXYW/Mesv3P1Kw==}
+    engines: {node: ^12.20.0 || ^14.15.0 || >= 15.9.0}
+    peerDependencies:
+      graphql: 17.0.0-alpha.9
 
   graphql-tag@2.12.6:
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
@@ -4891,6 +4900,10 @@ snapshots:
       - typescript
       - uWebSockets.js
       - utf-8-validate
+
+  graphql-relay@0.10.2(graphql@17.0.0-alpha.9):
+    dependencies:
+      graphql: 17.0.0-alpha.9
 
   graphql-tag@2.12.6(graphql@17.0.0-alpha.9):
     dependencies:

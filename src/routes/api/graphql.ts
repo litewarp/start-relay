@@ -1,22 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { yoga } from "~/lib/yoga.ts";
-
-const adapter = async ({
-  request,
-  context,
-}: {
-  request: Request;
-  context?: Record<string, unknown>;
-}) => {
-  const res = await yoga.handleRequest(request, context ?? {});
-  return res;
-};
+import { handler } from "~/lib/yoga/server.ts";
 
 export const Route = createFileRoute("/api/graphql")({
-  server: {
-    handlers: {
-      GET: adapter,
-      POST: adapter,
-    },
-  },
+	server: {
+		handlers: {
+			GET: handler,
+			POST: handler,
+		},
+	},
 });
