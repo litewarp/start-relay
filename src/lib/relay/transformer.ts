@@ -8,10 +8,7 @@ import type {
 function isInitialIncrementalExecutionResult(
 	result: InitialIncrementalExecutionResult | SubsequentIncrementalExecutionResult,
 ): result is InitialIncrementalExecutionResult {
-	if ("data" in result || "errors" in result) {
-		return !("path" in result) || !("label" in result);
-	}
-	return false;
+	return "data" in result || "errors" in result;
 }
 
 export class RelayIncrementalDeliveryTransformer {
@@ -24,7 +21,6 @@ export class RelayIncrementalDeliveryTransformer {
 	}
 	onNext(parts: Array<InitialIncrementalExecutionResult | SubsequentIncrementalExecutionResult>) {
 		for (const result of parts) {
-			console.log("transformer", result);
 			if (isInitialIncrementalExecutionResult(result)) {
 				this.dataTree = result.data;
 				this.next({

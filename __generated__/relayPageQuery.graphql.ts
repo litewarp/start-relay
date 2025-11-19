@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ea6f74f9c17210e158bac783c4f22d5d>>
+ * @generated SignedSource<<96284f710a4b0925380d36ea4d55f560>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -64,22 +64,28 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": null,
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "waitFor",
+                "value": 5000
+              }
+            ],
             "kind": "ScalarField",
             "name": "slowField",
-            "storageKey": null
+            "storageKey": "slowField(waitFor:5000)"
           }
         ]
       }
     ]
   },
   "params": {
-    "cacheID": "5b9db63b8117fe989890fd3e2d93b232",
+    "cacheID": "bceb006335be85a9e6e0e64de96eda1f",
     "id": null,
     "metadata": {},
     "name": "relayPageQuery",
     "operationKind": "query",
-    "text": "query relayPageQuery {\n  fastField\n  ...relayFragment @defer(label: \"relayPageQuery$defer$relayFragment\", if: true)\n}\n\nfragment relayFragment on Query {\n  slowField\n}\n"
+    "text": "query relayPageQuery {\n  fastField\n  ...relayFragment @defer(label: \"relayPageQuery$defer$relayFragment\", if: true)\n}\n\nfragment relayFragment on Query {\n  slowField(waitFor: 5000)\n}\n"
   }
 };
 })();
