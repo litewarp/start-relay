@@ -5,7 +5,7 @@ import type { RelayQuery } from "./relay-query.ts";
 
 export function dehydrateQuery<TQuery extends OperationType>(
 	query: RelayQuery,
-): Omit<SerializablePreloadedQuery<TQuery>, "recordMap"> {
+): Omit<SerializablePreloadedQuery<TQuery>, "response"> {
 	return {
 		params: query.request,
 		variables: query.variables,

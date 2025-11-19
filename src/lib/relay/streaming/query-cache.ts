@@ -65,22 +65,9 @@ export class QueryCache<
 	}
 
 	notify(event: QueryCacheNotifyEvent): void {
-		// only on server
 		this.listeners.forEach((listener) => {
 			listener(event);
 		});
-		// only on client
-		// const stream = this._streamedData.get(event.query.queryId);
-		// if (stream) {
-		// 	if (event.type === "data") {
-		// 		const data = Array.isArray(event.data) ? event.data : [event.data];
-		// 		data.forEach((d) => {
-		// 			stream.next(d);
-		// 		});
-		// 	} else if (event.type === "complete") {
-		// 		stream.complete();
-		// 	}
-		// }
 	}
 
 	build(

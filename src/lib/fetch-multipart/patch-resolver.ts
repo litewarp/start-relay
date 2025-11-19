@@ -1,6 +1,4 @@
-import type { ExecutionResult, ExperimentalIncrementalExecutionResults } from "graphql";
-
-export class PatchResolver<T extends ExecutionResult | ExperimentalIncrementalExecutionResults> {
+export class PatchResolver<T> {
 	onResponse: (results: T[]) => void;
 	boundary: string;
 	chunkBuffer: string;

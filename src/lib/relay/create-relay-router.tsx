@@ -2,6 +2,9 @@ import type { AnyRouter } from "@tanstack/react-router";
 import { Fragment, type ReactNode } from "react";
 import relay from "react-relay";
 import relayruntime, {
+	type EnvironmentConfig,
+	type GraphQLResponse,
+	type Observable,
 	type OperationType,
 	type Environment as RelayEnvironment,
 } from "relay-runtime";
@@ -11,6 +14,7 @@ import { createPushableStream } from "./stream.ts";
 import { dehydrateQuery } from "./streaming/hydration.ts";
 import { createPreloader, type SerializablePreloadedQuery } from "./streaming/preloader.ts";
 import type { QueryCache } from "./streaming/query-cache.ts";
+import { buildQueryId } from "./streaming/relay-query.ts";
 
 const { RelayEnvironmentProvider } = relay;
 
@@ -43,15 +47,10 @@ type StreamedData = SerializablePreloadedQuery<OperationType> & {
 	type: "data" | "error" | "complete";
 };
 
-interface DehydratedRouterQueryState<TOptions = RelayModernRecord> {
-	dehydratedEnvironment?: {
-		options: TOptions;
-		recordSource: RecordMap;
-	};
+interface DehydratedRouterQueryState {
+	dehydratedEnvironment: RecordMap;
 	queryStream: ReadableStream<StreamedData>;
 }
-
-let dehydrateCount = 0;
 
 export function createRelayRouter<TRouter extends AnyRouter>(
 	router: ValidateRouter<TRouter>,
@@ -81,116 +80,114 @@ export function createRelayRouter<TRouter extends AnyRouter>(
 		},
 	};
 
+	const ogHydrate = router.options.hydrate;
+	const ogDehydrate = router.options.dehydrate;
+
 	if (router.isServer) {
 		const sentQueries = new Set<string>();
 		const queryStream = createPushableStream<StreamedData>();
 
 		router.options.dehydrate = async (): Promise<DehydratedRouterQueryState> => {
-			dehydrateCount++;
-			console.log(`dehydrateCount: ${dehydrateCount}`);
-			const ogDehydrated = await ogOptions?.dehydrate?.();
-			const dehydratedEnvironnment = {
-				options: environment.options,
-				recordSource: environment.getStore().getSource().toJSON(),
-			};
-
-			// add sentQueries to dehydratedEnvironnment
-
 			if (!router.serverSsr) {
 				throw new Error("Server-side rendering is not enabled");
 			}
-
 			router.serverSsr.onRenderFinished(() => {
 				console.log("render finished");
 				queryStream.close();
 			});
+			const ogDehydrated = await ogDehydrate?.();
+			const dehydratedRouter: DehydratedRouterQueryState = {
+				...ogDehydrated,
+				queryStream: queryStream.stream,
+			};
+			dehydratedRouter.dehydratedEnvironment = environment.getStore().getSource().toJSON();
+			return dehydratedRouter;
+		};
 
-			if (queryCache) {
-				queryCache.subscribe((event) => {
-					// before rendering starts, we do not stream individual queries
-					// instead we dehydrate the entire query client in router's dehydrate()
-					// if attachRouterServerSsrUtils() has not been called yet, `router.serverSsr` will be undefined and we also do not stream
+		if (queryCache) {
+			queryCache.subscribe((event) => {
+				console.log(event);
+				const { params, variables } = dehydrateQuery(event.query);
+
+				if (event.type === "data") {
 					if (!router.serverSsr?.isDehydrated()) {
 						return;
 					}
-					const { params, variables } = dehydrateQuery(event.query);
 
-					if (event.type === "data") {
-						console.log("sent data", event);
-						if (sentQueries.has(event.query.queryId)) {
-							console.warn(`query ${event.query.queryId} was already sent`);
-							return;
-						}
-						if (queryStream.isClosed()) {
-							console.warn(
-								`tried to stream query ${event.query.queryId} after stream was already closed`,
-							);
-							return;
-						}
-						sentQueries.add(event.query.queryId);
-						queryStream.enqueue({
-							type: "data",
-							params,
-							variables,
-							recordMap: environment.getStore().getSource().toJSON(),
-						});
-						return;
-					} else if (event.type === "complete") {
-						//noop
-						sentQueries.add(event.query.queryId);
-					} else if (event.type === "error") {
-						console.error(event);
+					if (queryStream.isClosed()) {
+						console.warn(
+							`tried to stream query ${event.query.queryId} after stream was already closed`,
+						);
 						return;
 					}
-				});
-			}
-
-			return {
-				...ogDehydrated,
-				dehydratedEnvironnment,
-				queryStream: queryStream.stream,
-			};
-		};
+					if (sentQueries.has(event.query.queryId)) {
+						console.log("query already sent");
+					}
+					sentQueries.add(event.query.queryId);
+					queryStream.enqueue({
+						type: "data",
+						params,
+						variables,
+						response: event.data,
+					});
+					return;
+				} else if (event.type === "complete") {
+					//noop
+					sentQueries.add(event.query.queryId);
+				} else if (event.type === "error") {
+					console.error(event);
+					return;
+				}
+			});
+		}
 	} else {
 		router.options.hydrate = async (dehydrated: DehydratedRouterQueryState) => {
-			await ogOptions.hydrate?.(dehydrated);
-			if (dehydrated.dehydratedEnvironment?.recordSource) {
-				environment
-					.getStore()
-					.publish(new RecordSource(dehydrated.dehydratedEnvironment.recordSource));
+			await ogHydrate?.(dehydrated);
+			if (dehydrated.dehydratedEnvironment) {
+				const source = dehydrated.dehydratedEnvironment;
+				console.log("dehydrated", source);
+				environment.getStore().publish(new RecordSource(source));
 			}
-			readableStreamToObservable<SerializablePreloadedQuery<OperationType>>(
-				dehydrated.queryStream,
-			).subscribe({
+
+			observableFromStream(dehydrated.queryStream).subscribe({
 				next: (value) => {
-					console.log("streamed value", value);
-					if (!value) {
-						throw new Error("No value");
+					console.log("value", value);
+					if (value) {
+						const query = queryCache.build(value.params, value.variables, {}, {});
+						query.next(value.response as GraphQLResponse);
 					}
-					const store = environment.getStore();
-					store.publish(new RecordSource(value.recordMap));
+				},
+				error: (error) => {
+					console.error(error);
+				},
+				complete: () => {
+					console.log("done");
 				},
 			});
 		};
 	}
-
 	return router;
 }
 
-function readableStreamToObservable<T>(stream: ReadableStream) {
-	return Observable.create<T>((sink) => {
-		const reader = stream.getReader();
-		reader
-			.read()
-			.then(({ done, value }) => {
-				if (!done) {
-					sink.next(value);
-				} else {
-					sink.complete();
-				}
-			})
-			.catch((error) => {
-				sink.error(error);
-			});
+function observableFromStream<T>(stream: ReadableStream<T>): Observable<T> {
+	return Observable.create<T>((subscriber) => {
+		stream.pipeTo(
+			new WritableStream({
+				write: (chunk) => {
+					subscriber.next(chunk);
+				},
+				abort: (error) => {
+					subscriber.error(error);
+				},
+				close: () => {
+					subscriber.complete();
+				},
+			}),
+		);
+		return () => {
+			if (!stream.locked) {
+				stream.cancel();
+			}
+		};
 	});
 }

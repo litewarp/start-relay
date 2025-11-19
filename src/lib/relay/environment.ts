@@ -5,6 +5,7 @@ import type { QueryCache } from "./streaming/query-cache.ts";
 export const createEnvironment = (queryCache: QueryCache) => {
 	console.log(`New environment created in ${typeof window === "undefined" ? "server" : "client"}`);
 	return new Environment({
+	  deferDeduplicatedFields: true,
 		network: new RelayReplayNetwork({
 			queryCache,
 			isServer: typeof window === "undefined",

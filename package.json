@@ -16,6 +16,7 @@
 		"@tanstack/react-router": "^1.135.2",
 		"@tanstack/react-router-devtools": "^1.135.2",
 		"@tanstack/react-start": "^1.135.2",
+		"fetch-multipart-graphql": "^2.3.1",
 		"graphql": "17.0.0-alpha.9",
 		"graphql-yoga": "^5.16.2",
 		"meros": "^1.3.2",
@@ -50,6 +51,7 @@
 	},
 	"pnpm": {
 		"overrides": {
+			"relay-runtime": "^20.1.1",
 			"graphql": "17.0.0-alpha.9"
 		},
 		"onlyBuiltDependencies": [

@@ -1,29 +1,31 @@
 import type { Environment, GraphQLTaggedNode } from "react-relay";
+import relay from "react-relay";
 import runtime, {
 	type CacheConfig,
 	type OperationType,
 	type RequestParameters,
 	type VariablesOf,
 } from "relay-runtime";
-import type { RecordMap } from "relay-runtime/lib/store/RelayStoreTypes.js";
 
-const { fetchQuery } = runtime;
+const { loadQuery } = relay;
+const { getRequest } = runtime;
 
 export interface SerializablePreloadedQuery<TQuery extends OperationType> {
 	params: RequestParameters;
 	variables: VariablesOf<TQuery>;
-	recordMap: RecordMap;
+	response: TQuery["response"];
 }
 
 export const createPreloader = (environment: Environment) => {
-	const preloadQuery = async <TQuery extends OperationType>(
+	const preloadQuery = <TQuery extends OperationType>(
 		node: GraphQLTaggedNode,
 		variables: VariablesOf<TQuery>,
 		networkCacheConfig?: CacheConfig,
-	): Promise<void> => {
-		await fetchQuery<TQuery>(environment, node, variables, {
-			networkCacheConfig,
-		}).toPromise();
+	) => {
+		return loadQuery<TQuery>(environment, getRequest(node), variables, {
+			fetchPolicy: "store-or-network",
+			...networkCacheConfig,
+		});
 	};
 
 	return preloadQuery;

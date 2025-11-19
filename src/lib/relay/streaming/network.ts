@@ -1,13 +1,13 @@
-import {
-	type ExecuteFunction,
-	type FetchFunction,
-	type GraphQLResponse,
-	Network,
-	Observable,
-} from "relay-runtime";
+import type {
+	InitialIncrementalExecutionResult,
+	SubsequentIncrementalExecutionResult,
+} from "graphql";
+import type { i } from "node_modules/vite/dist/node/chunks/moduleRunnerTransport.js";
+import { type ExecuteFunction, type FetchFunction, Network, Observable } from "relay-runtime";
 import { multipartFetch } from "~/lib/fetch-multipart/index.ts";
 import { debug } from "../debug.ts";
 import type { QueryCache, QueryCacheNotifyEvent } from "./query-cache.ts";
+import { RelayIncrementalDeliveryTransformer } from "./transformer.ts";
 
 interface RelayReplayNetworkConfig {
 	url: string;
@@ -33,7 +33,7 @@ export class RelayReplayNetwork {
 		this.queryCache = queryCache;
 
 		this._fetchFn = (request, variables, cacheConfig, uploadables) => {
-			debug(`fetching ${typeof window === "undefined" ? "in server" : "in browser"}`);
+			debug(`starting fetch ${typeof window === "undefined" ? "in server" : "in browser"}`);
 
 			// const forceFetch = cacheConfig?.force ?? false;
 
@@ -44,49 +44,49 @@ export class RelayReplayNetwork {
 
 			const query = this.queryCache.build(request, variables, cacheConfig, uploadables);
 
-			// if we are on the client, we check to see if we have a replayer
-			// if so, we return the replayed observable
-			if (!this._isServer) {
-				if (query.isQuery()) {
-					const replaySubject = this.queryCache.getReplaySubject(query.queryId);
-					if (replaySubject) {
-						console.log("has replaySubject");
-						return Observable.create<GraphQLResponse>((sink) => {
-							replaySubject.subscribe(sink);
-						});
-					}
-				}
+			if (query.hasData) {
+				return Observable.create((sink) => {
+					console.log("returning from replay");
+					query.subscribe(sink);
+				});
 			}
 
-			return Observable.create<GraphQLResponse>((sink) => {
-				multipartFetch<GraphQLResponse>(this._url, {
-					method: this._fetchOpts?.method ?? "POST",
-					headers: {
-						"content-type": "application/json",
-						...(this._fetchOpts.headers ?? {}),
-					},
-					body: JSON.stringify({
-						id: request.id,
-						query: request.text,
-						variables,
-					}),
-					credentials: this._fetchOpts.credentials,
-					signal,
-					onComplete: () => {
-						sink.complete();
-						this._publish({ type: "complete", query });
-					},
-					onError: (error) => {
-						sink.error(error);
-						this._publish({ type: "error", query, error: error });
-					},
-					onNext: (value) => {
-						//TODO: check if there are additional values
-						sink.next(value[0]);
-						this._publish({ type: "data", query, data: value });
-					},
+			const obs = Observable.create((sink) => {
+				const transformer = new RelayIncrementalDeliveryTransformer((...args) => {
+					if (this._isServer) {
+						this.queryCache.notify({ type: "data", query, data: args[0] });
+					}
+					sink.next(...args);
 				});
+				multipartFetch<InitialIncrementalExecutionResult | SubsequentIncrementalExecutionResult>(
+					this._url,
+					{
+						method: this._fetchOpts?.method ?? "POST",
+						headers: {
+							"content-type": "application/json",
+							...(this._fetchOpts.headers ?? {}),
+						},
+						body: JSON.stringify({
+							id: request.id,
+							query: request.text,
+							variables,
+						}),
+						credentials: this._fetchOpts.credentials,
+						signal: this._isServer ? undefined : signal,
+						onComplete: () => {
+							sink.complete();
+						},
+						onError: (error) => {
+							sink.error(error);
+						},
+						onNext: (value) => {
+							transformer.onNext(value);
+						},
+					},
+				);
 			});
+
+			return obs;
 		};
 
 		const network = Network.create(this._fetchFn);

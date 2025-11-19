@@ -34,7 +34,7 @@ export class HttpError extends Error {
 	}
 }
 
-export function multipartFetch<T extends object>(
+export function multipartFetch<T>(
 	url: string,
 	options: Pick<RequestInit, "method" | "headers" | "credentials" | "body" | "signal"> & {
 		onNext: (patch: T[], options: { responseHeaders: Headers }) => void;

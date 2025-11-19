@@ -26,7 +26,6 @@ function RouteComponent() {
 		{},
 		{
 			fetchPolicy: "store-or-network",
-			UNSTABLE_renderPolicy: "partial",
 		},
 	);
 
