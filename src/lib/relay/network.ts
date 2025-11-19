@@ -53,6 +53,7 @@ export class RelayReplayNetwork {
 			const obs = Observable.create((sink) => {
 				const transformer = new RelayIncrementalDeliveryTransformer((...args) => {
 					if (this._isServer) {
+						console.log("notify", args);
 						this.queryCache.notify({ type: "data", query, data: args[0] });
 					}
 					sink.next(...args);
