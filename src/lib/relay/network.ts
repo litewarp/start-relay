@@ -2,11 +2,9 @@ import type {
 	InitialIncrementalExecutionResult,
 	SubsequentIncrementalExecutionResult,
 } from "graphql";
-import type { i } from "node_modules/vite/dist/node/chunks/moduleRunnerTransport.js";
 import { type ExecuteFunction, type FetchFunction, Network, Observable } from "relay-runtime";
 import { multipartFetch } from "~/lib/fetch-multipart/index.ts";
-import { debug } from "../debug.ts";
-import type { QueryCache, QueryCacheNotifyEvent } from "./query-cache.ts";
+import type { QueryCache } from "./query-cache.ts";
 import { RelayIncrementalDeliveryTransformer } from "./transformer.ts";
 
 interface RelayReplayNetworkConfig {
@@ -22,6 +20,7 @@ export class RelayReplayNetwork {
 
 	private _url: string;
 	private _fetchOpts: RequestInit;
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: bound to network
 	private _fetchFn: FetchFunction;
 	private _isServer: boolean;
 
@@ -33,7 +32,7 @@ export class RelayReplayNetwork {
 		this.queryCache = queryCache;
 
 		this._fetchFn = (request, variables, cacheConfig, uploadables) => {
-			debug(`starting fetch ${typeof window === "undefined" ? "in server" : "in browser"}`);
+			// console.log(`starting fetch ${typeof window === "undefined" ? "in server" : "in browser"}`);
 
 			// const forceFetch = cacheConfig?.force ?? false;
 
@@ -46,7 +45,7 @@ export class RelayReplayNetwork {
 
 			if (query.hasData) {
 				return Observable.create((sink) => {
-					console.log("returning from replay");
+					// console.log("returning from replay");
 					query.subscribe(sink);
 				});
 			}
@@ -91,19 +90,5 @@ export class RelayReplayNetwork {
 
 		const network = Network.create(this._fetchFn);
 		this.execute = network.execute;
-	}
-
-	_publish(event: QueryCacheNotifyEvent) {
-		if (!this._isServer) {
-			return;
-		}
-		this.queryCache.notify(event);
-	}
-
-	_replay(queryId: string) {
-		if (this._isServer) {
-			console.warn(`replaying query ${queryId} on server -- noop`);
-			return;
-		}
 	}
 }

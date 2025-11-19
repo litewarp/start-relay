@@ -4,9 +4,6 @@ import type {
 	InitialIncrementalExecutionResult,
 	SubsequentIncrementalExecutionResult,
 } from "graphql";
-import { Observable, type RequestParameters, type Variables } from "relay-runtime";
-import type { Sink } from "relay-runtime/lib/network/RelayObservable.js";
-import { multipartFetch } from "~/lib/fetch-multipart/index.ts";
 
 function isInitialIncrementalExecutionResult(
 	result: InitialIncrementalExecutionResult | SubsequentIncrementalExecutionResult,
@@ -118,38 +115,4 @@ export class RelayIncrementalDeliveryTransformer {
 			}
 		}
 	}
-}
-
-export function fetchGraphQL(request: RequestParameters, variables: Variables) {
-	return Observable.create((sink) => {
-		const transformer = new RelayIncrementalDeliveryTransformer((...args) => {
-			console.log("args", ...args);
-			sink.next(...args);
-		});
-		multipartFetch<InitialIncrementalExecutionResult | SubsequentIncrementalExecutionResult>(
-			"http://localhost:4000/graphql",
-			{
-				method: "POST",
-				headers: {
-					"content-type": "application/json",
-				},
-				body: JSON.stringify({
-					query: request.text,
-					variables,
-				}),
-				credentials: "same-origin",
-				onNext: (parts) => {
-					transformer.onNext(parts);
-				},
-				onError: (err) => {
-					console.log("onError", err);
-					sink.error(err);
-				},
-				onComplete: () => {
-					console.log("onComplete");
-					sink.complete();
-				},
-			},
-		);
-	});
 }

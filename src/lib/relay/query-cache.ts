@@ -1,16 +1,27 @@
-import {
-	type CacheConfig,
-	type GraphQLResponse,
-	ReplaySubject,
-	type RequestParameters,
-	type UploadableMap,
-	type Variables,
+import type {
+	CacheConfig,
+	GraphQLResponse,
+	RequestParameters,
+	UploadableMap,
+	Variables,
 } from "relay-runtime";
-import type { Subscription } from "relay-runtime/lib/network/RelayObservable.js";
 import { buildQueryId, RelayQuery } from "./relay-query.ts";
 import { Subscribable } from "./subscribable.ts";
-import type { DefaultError, NotifyEvent } from "./types.ts";
 
+// biome-ignore lint/complexity/noBannedTypes: hack
+export type Register = {};
+
+export type DefaultError = Register extends {
+	defaultError: infer TError;
+}
+	? TError
+	: Error;
+
+export type NotifyEventType = "added" | "data" | "error" | "complete";
+
+export interface NotifyEvent {
+	type: NotifyEventType;
+}
 interface NotifyEventQueryAdded extends NotifyEvent {
 	type: "added";
 	query: RelayQuery;
@@ -42,26 +53,19 @@ export type QueryCacheNotifyEvent =
 type DispatchFn = (event: QueryCacheNotifyEvent) => void;
 
 export interface QueryStore {
-	has: (queryHash: string) => boolean;
-	set: (queryHash: string, query: RelayQuery) => void;
-	get: (queryHash: string) => RelayQuery | undefined;
-	delete: (queryHash: string) => void;
+	has: (queryId: string) => boolean;
+	set: (queryId: string, query: RelayQuery) => void;
+	get: (queryId: string) => RelayQuery | undefined;
+	delete: (queryId: string) => void;
 	values: () => IterableIterator<RelayQuery>;
 }
 
-export class QueryCache<
-	T extends QueryCacheNotifyEvent = QueryCacheNotifyEvent,
-> extends Subscribable<DispatchFn> {
+export class QueryCache extends Subscribable<DispatchFn> {
 	queries: QueryStore;
-	_replayComplete: boolean = false;
-	_events: Array<T> = [];
-	_subscriptions: Array<Subscription> = [];
-	_streamedData: Map<string, ReplaySubject<GraphQLResponse>>;
 
 	constructor() {
 		super();
 		this.queries = new Map<string, RelayQuery>();
-		this._streamedData = new Map<string, ReplaySubject<GraphQLResponse>>();
 	}
 
 	notify(event: QueryCacheNotifyEvent): void {
@@ -94,20 +98,5 @@ export class QueryCache<
 
 	get(queryId: string): RelayQuery | undefined {
 		return this.queries.get(queryId);
-	}
-
-	getReplaySubject(queryId: string): ReplaySubject<GraphQLResponse> | undefined {
-		return this._streamedData.get(queryId);
-	}
-
-	createReplaySubject(queryId: string): ReplaySubject<GraphQLResponse> {
-		let subject = this._streamedData.get(queryId);
-		if (subject) {
-			console.warn("already have a replay subject");
-			return subject;
-		}
-		subject = new ReplaySubject<GraphQLResponse>();
-		this._streamedData.set(queryId, subject);
-		return subject;
 	}
 }

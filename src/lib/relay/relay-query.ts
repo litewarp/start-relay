@@ -15,12 +15,16 @@ interface RelayQueryConfig {
 	uploadables?: UploadableMap | null;
 }
 
+export const buildQueryId = (request: RequestParameters, variables: Variables = {}): string => {
+	const cacheKey = request.id ?? request.cacheID;
+	return `${cacheKey}:${JSON.stringify(variables)}`;
+};
+
 export class RelayQuery {
 	queryId: string;
 	request: RequestParameters;
 	variables: Variables;
 	cacheConfig: CacheConfig;
-	abortSignalConsumed: boolean;
 	uploadables?: UploadableMap | null;
 	replaySubject: ReplaySubject<GraphQLResponse>;
 	hasData?: boolean = false;
@@ -28,7 +32,6 @@ export class RelayQuery {
 
 	constructor(config: RelayQueryConfig) {
 		const { request, variables, cacheConfig, uploadables } = config;
-		this.abortSignalConsumed = false;
 		this.request = request;
 		this.variables = variables;
 		this.queryId = buildQueryId(request, variables);
@@ -47,7 +50,7 @@ export class RelayQuery {
 	}
 
 	error(err: Error) {
-		console.log("error");
+		console.log("error", err);
 	}
 
 	complete() {
@@ -59,8 +62,3 @@ export class RelayQuery {
 		return this.replaySubject.subscribe(observer);
 	}
 }
-
-export const buildQueryId = (request: RequestParameters, variables: Variables = {}): string => {
-	const cacheKey = request.id ?? request.cacheID;
-	return `${cacheKey}:${JSON.stringify(variables)}`;
-};

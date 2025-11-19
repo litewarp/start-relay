@@ -2,19 +2,16 @@ import type { AnyRouter } from "@tanstack/react-router";
 import { Fragment, type ReactNode } from "react";
 import relay from "react-relay";
 import relayruntime, {
-	type EnvironmentConfig,
 	type GraphQLResponse,
-	type Observable,
 	type OperationType,
 	type Environment as RelayEnvironment,
 } from "relay-runtime";
-import type { RelayModernRecord } from "relay-runtime/lib/store/RelayModernRecord.js";
+import type { RelayObservable } from "relay-runtime/lib/network/RelayObservable.js";
 import type { RecordMap } from "relay-runtime/lib/store/RelayStoreTypes.js";
+import { dehydrateQuery } from "./hydration.ts";
+import { createPreloader, type SerializablePreloadedQuery } from "./preloader.ts";
+import type { QueryCache } from "./query-cache.ts";
 import { createPushableStream } from "./stream.ts";
-import { dehydrateQuery } from "./streaming/hydration.ts";
-import { createPreloader, type SerializablePreloadedQuery } from "./streaming/preloader.ts";
-import type { QueryCache } from "./streaming/query-cache.ts";
-import { buildQueryId } from "./streaming/relay-query.ts";
 
 const { RelayEnvironmentProvider } = relay;
 
@@ -92,7 +89,7 @@ export function createRelayRouter<TRouter extends AnyRouter>(
 				throw new Error("Server-side rendering is not enabled");
 			}
 			router.serverSsr.onRenderFinished(() => {
-				console.log("render finished");
+				// console.log("render finished");
 				queryStream.close();
 			});
 			const ogDehydrated = await ogDehydrate?.();
@@ -106,7 +103,6 @@ export function createRelayRouter<TRouter extends AnyRouter>(
 
 		if (queryCache) {
 			queryCache.subscribe((event) => {
-				console.log(event);
 				const { params, variables } = dehydrateQuery(event.query);
 
 				if (event.type === "data") {
@@ -121,7 +117,7 @@ export function createRelayRouter<TRouter extends AnyRouter>(
 						return;
 					}
 					if (sentQueries.has(event.query.queryId)) {
-						console.log("query already sent");
+						// console.log("query already sent");
 					}
 					sentQueries.add(event.query.queryId);
 					queryStream.enqueue({
@@ -145,19 +141,18 @@ export function createRelayRouter<TRouter extends AnyRouter>(
 			await ogHydrate?.(dehydrated);
 			if (dehydrated.dehydratedEnvironment) {
 				const source = dehydrated.dehydratedEnvironment;
-				console.log("dehydrated", source);
 				environment.getStore().publish(new RecordSource(source));
 			}
 
 			observableFromStream(dehydrated.queryStream).subscribe({
 				next: (value) => {
-					console.log("value", value);
+					// console.log("value", value);
 					if (value) {
 						const query = queryCache.build(value.params, value.variables, {}, {});
 						query.next(value.response as GraphQLResponse);
 					}
 				},
-				error: (error) => {
+				error: (error: Error | unknown) => {
 					console.error(error);
 				},
 				complete: () => {
@@ -169,7 +164,7 @@ export function createRelayRouter<TRouter extends AnyRouter>(
 	return router;
 }
 
-function observableFromStream<T>(stream: ReadableStream<T>): Observable<T> {
+function observableFromStream<T>(stream: ReadableStream<T>): RelayObservable<T> {
 	return Observable.create<T>((subscriber) => {
 		stream.pipeTo(
 			new WritableStream({

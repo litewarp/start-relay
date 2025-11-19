@@ -3,7 +3,7 @@ import { createEnvironment } from "~/lib/relay/environment.ts";
 import { DefaultCatchBoundary } from "./components/DefaultCatchBoundary.tsx";
 import { NotFound } from "./components/NotFound.tsx";
 import { createRelayRouter } from "./lib/relay/create-relay-router.tsx";
-import { QueryCache } from "./lib/relay/streaming/query-cache.ts";
+import { QueryCache } from "./lib/relay/query-cache.ts";
 import { routeTree } from "./routeTree.gen.ts";
 
 const queryCache = new QueryCache();
