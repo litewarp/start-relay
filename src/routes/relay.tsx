@@ -51,7 +51,7 @@ function AlphaFragment(props: { query: relayFragment$key }) {
 	const data = useFragment(
 		graphql`
     fragment relayFragment on Query {
-        slowField(waitFor: 5000)
+        slowField
     }
   `,
 		props.query,
