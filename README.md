@@ -6,9 +6,9 @@ The `/src/lib/fetch-multipart` package is slightly modified version of `fetch-mu
 
 The fetch function uses a transformer to properly parse and format the incremental payloads. It is based on the [example here by robrichard](https://github.com/robrichard/defer-relay-example/blob/main/client/fetchGraphQL.ts). You can find it in `/src/lib/relay/transformer.ts`
 
-There is one open issue with the incremental transformer, both of which are mismatches between the graphql spec and relay's. Right now you get two Relay warnings:
+There is one open issue with the incremental transformer, both of which are mismatches between the graphql spec and relay's. Right now you kight get a Relay warning when using the @stream directive:
 
-1. Relay does not currently allow missing fields from defer payloads. 
+Relay does not currently allow missing fields from defer payloads. 
 
 ```
 Warning: RelayResponseNormalizer: Payload did not contain a value for field `fastField: fastField`. Check that you are parsing with the same query that was used to fetch the payload.
