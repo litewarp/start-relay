@@ -82,8 +82,12 @@ export function parseMultipartHttp<T>(
 	// remove trailing boundary things
 	body = body.replace(`${delimiter}\r\n`, "").replace(`${delimiter}--\r\n`, "");
 
-	let payload = JSON.parse(body);
-	if (payload.incremental) payload = payload.incremental[0];
+	const payload = JSON.parse(body);
+	// TODO: This in the fetch fn converts a response of type
+	// {hasNext: boolean, incremental: [{data: object, id: 0}], completed: [{id: '0}]}
+	// into {data: object, id: 0}
+	// if (payload.incremental) payload = payload.incremental[0];
+
 	const parts = [...previousParts, payload];
 
 	if (next?.length) {

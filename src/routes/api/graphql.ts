@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { handler } from "~/lib/yoga/server.ts";
+import { graphqlHandler } from "~/lib/graphql/handler.ts";
 
 export const Route = createFileRoute("/api/graphql")({
 	server: {
 		handlers: {
-			GET: handler,
-			POST: handler,
+			GET: graphqlHandler,
+			POST: graphqlHandler,
 		},
 	},
 });

@@ -79,6 +79,7 @@ export class RelayReplayNetwork {
 							sink.error(error);
 						},
 						onNext: (value) => {
+							console.log("raw value from multipartFetch", value);
 							transformer.onNext(value);
 						},
 					},
