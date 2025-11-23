@@ -8,97 +8,97 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as StreamRouteImport } from './routes/stream'
-import { Route as RelayRouteImport } from './routes/relay'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiGraphqlRouteImport } from './routes/api/graphql'
+import { Route as rootRouteImport } from './routes/__root';
+import { Route as StreamRouteImport } from './routes/stream';
+import { Route as RelayRouteImport } from './routes/relay';
+import { Route as IndexRouteImport } from './routes/index';
+import { Route as ApiGraphqlRouteImport } from './routes/api/graphql';
 
 const StreamRoute = StreamRouteImport.update({
   id: '/stream',
   path: '/stream',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const RelayRoute = RelayRouteImport.update({
   id: '/relay',
   path: '/relay',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const ApiGraphqlRoute = ApiGraphqlRouteImport.update({
   id: '/api/graphql',
   path: '/api/graphql',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/relay': typeof RelayRoute
-  '/stream': typeof StreamRoute
-  '/api/graphql': typeof ApiGraphqlRoute
+  '/': typeof IndexRoute;
+  '/relay': typeof RelayRoute;
+  '/stream': typeof StreamRoute;
+  '/api/graphql': typeof ApiGraphqlRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/relay': typeof RelayRoute
-  '/stream': typeof StreamRoute
-  '/api/graphql': typeof ApiGraphqlRoute
+  '/': typeof IndexRoute;
+  '/relay': typeof RelayRoute;
+  '/stream': typeof StreamRoute;
+  '/api/graphql': typeof ApiGraphqlRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/relay': typeof RelayRoute
-  '/stream': typeof StreamRoute
-  '/api/graphql': typeof ApiGraphqlRoute
+  __root__: typeof rootRouteImport;
+  '/': typeof IndexRoute;
+  '/relay': typeof RelayRoute;
+  '/stream': typeof StreamRoute;
+  '/api/graphql': typeof ApiGraphqlRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/relay' | '/stream' | '/api/graphql'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/relay' | '/stream' | '/api/graphql'
-  id: '__root__' | '/' | '/relay' | '/stream' | '/api/graphql'
-  fileRoutesById: FileRoutesById
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: '/' | '/relay' | '/stream' | '/api/graphql';
+  fileRoutesByTo: FileRoutesByTo;
+  to: '/' | '/relay' | '/stream' | '/api/graphql';
+  id: '__root__' | '/' | '/relay' | '/stream' | '/api/graphql';
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  RelayRoute: typeof RelayRoute
-  StreamRoute: typeof StreamRoute
-  ApiGraphqlRoute: typeof ApiGraphqlRoute
+  IndexRoute: typeof IndexRoute;
+  RelayRoute: typeof RelayRoute;
+  StreamRoute: typeof StreamRoute;
+  ApiGraphqlRoute: typeof ApiGraphqlRoute;
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/stream': {
-      id: '/stream'
-      path: '/stream'
-      fullPath: '/stream'
-      preLoaderRoute: typeof StreamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/stream';
+      path: '/stream';
+      fullPath: '/stream';
+      preLoaderRoute: typeof StreamRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/relay': {
-      id: '/relay'
-      path: '/relay'
-      fullPath: '/relay'
-      preLoaderRoute: typeof RelayRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/relay';
+      path: '/relay';
+      fullPath: '/relay';
+      preLoaderRoute: typeof RelayRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/api/graphql': {
-      id: '/api/graphql'
-      path: '/api/graphql'
-      fullPath: '/api/graphql'
-      preLoaderRoute: typeof ApiGraphqlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/api/graphql';
+      path: '/api/graphql';
+      fullPath: '/api/graphql';
+      preLoaderRoute: typeof ApiGraphqlRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -107,16 +107,16 @@ const rootRouteChildren: RootRouteChildren = {
   RelayRoute: RelayRoute,
   StreamRoute: StreamRoute,
   ApiGraphqlRoute: ApiGraphqlRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { getRouter } from './router.tsx';
+import type { createStart } from '@tanstack/react-start';
 declare module '@tanstack/react-start' {
   interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
+    ssr: true;
+    router: Awaited<ReturnType<typeof getRouter>>;
   }
 }

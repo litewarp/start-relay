@@ -8,13 +8,13 @@ The fetch function uses a transformer to properly parse and format the increment
 
 There are two open issues with the incremental transformer, both of which are mismatches between the graphql spec and relay's. Right now you get two Relay warnings:
 
-1. Relay does not currently allow missing fields from defer payloads. 
+1. Relay does not currently allow missing fields from defer payloads.
 
 ```
 Warning: RelayResponseNormalizer: Payload did not contain a value for field `fastField: fastField`. Check that you are parsing with the same query that was used to fetch the payload.
 ```
 
-This is a [known issue](https://github.com/facebook/relay/issues/5081#issuecomment-3335575472) and there is a [fix in place](https://github.com/facebook/relay/pull/5083). 
+This is a [known issue](https://github.com/facebook/relay/issues/5081#issuecomment-3335575472) and there is a [fix in place](https://github.com/facebook/relay/pull/5083).
 
 2. Formatting the incremental streams pushed through the router
 
