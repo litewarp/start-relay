@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StreamRouteImport } from './routes/stream'
 import { Route as RelayRouteImport } from './routes/relay'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiGraphqlRouteImport } from './routes/api/graphql'
 
+const StreamRoute = StreamRouteImport.update({
+  id: '/stream',
+  path: '/stream',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RelayRoute = RelayRouteImport.update({
   id: '/relay',
   path: '/relay',
@@ -32,35 +38,46 @@ const ApiGraphqlRoute = ApiGraphqlRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/relay': typeof RelayRoute
+  '/stream': typeof StreamRoute
   '/api/graphql': typeof ApiGraphqlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/relay': typeof RelayRoute
+  '/stream': typeof StreamRoute
   '/api/graphql': typeof ApiGraphqlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/relay': typeof RelayRoute
+  '/stream': typeof StreamRoute
   '/api/graphql': typeof ApiGraphqlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/relay' | '/api/graphql'
+  fullPaths: '/' | '/relay' | '/stream' | '/api/graphql'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/relay' | '/api/graphql'
-  id: '__root__' | '/' | '/relay' | '/api/graphql'
+  to: '/' | '/relay' | '/stream' | '/api/graphql'
+  id: '__root__' | '/' | '/relay' | '/stream' | '/api/graphql'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   RelayRoute: typeof RelayRoute
+  StreamRoute: typeof StreamRoute
   ApiGraphqlRoute: typeof ApiGraphqlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stream': {
+      id: '/stream'
+      path: '/stream'
+      fullPath: '/stream'
+      preLoaderRoute: typeof StreamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/relay': {
       id: '/relay'
       path: '/relay'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   RelayRoute: RelayRoute,
+  StreamRoute: StreamRoute,
   ApiGraphqlRoute: ApiGraphqlRoute,
 }
 export const routeTree = rootRouteImport
