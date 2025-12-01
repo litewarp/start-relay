@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite dev",
     "relay": "relay-compiler --watch",
-    "check": "oxlint --fix .",
+    "lint": "oxlint --fix .",
+    "check": "tsc --noEmit",
     "build": "vite build && tsc --noEmit",
     "start": "node .output/server/index.mjs"
   },
@@ -28,7 +29,6 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.17",
-    "@tanstack/router-core": "^1.139.10",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.4",
     "@types/react-dom": "^19.2.3",

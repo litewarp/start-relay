@@ -1,5 +1,5 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
-import { createEnvironment } from '~/lib/relay-streaming/environment.ts';
+import { createEnvironment } from '~/lib/relay/environment.ts';
 import { DefaultCatchBoundary } from './components/DefaultCatchBoundary.tsx';
 import { NotFound } from './components/NotFound.tsx';
 import { routerWithRelay } from './lib/relay-streaming/router-with-relay.tsx';

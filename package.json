@@ -1,5 +1,5 @@
 {
-  "name": "@litewarp/tanstack-relay-adapter",
+  "name": "@litewarp/tanstack-relay",
   "private": true,
   "sideEffects": false,
   "type": "module",
