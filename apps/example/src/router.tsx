@@ -20,7 +20,6 @@ export function getRouter() {
       scrollRestoration: true,
       context: {
         environment: null,
-        user: null,
         preloadQuery: null,
       },
     }),
