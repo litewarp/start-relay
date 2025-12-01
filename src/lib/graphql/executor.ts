@@ -1,54 +1,54 @@
 import {
-	type DocumentNode,
-	experimentalExecuteIncrementally,
-	type GraphQLArgs,
-	type GraphQLError,
-	parse,
-	validate,
-	validateSchema,
-} from "graphql";
+  type DocumentNode,
+  experimentalExecuteIncrementally,
+  type GraphQLArgs,
+  type GraphQLError,
+  parse,
+  validate,
+  validateSchema,
+} from 'graphql';
 
 export function graphql(args: GraphQLArgs): ReturnType<typeof experimentalExecuteIncrementally> {
-	const {
-		schema,
-		source,
-		rootValue,
-		contextValue,
-		variableValues,
-		operationName,
-		fieldResolver,
-		typeResolver,
-	} = args;
+  const {
+    schema,
+    source,
+    rootValue,
+    contextValue,
+    variableValues,
+    operationName,
+    fieldResolver,
+    typeResolver,
+  } = args;
 
-	// Validate Schema
-	const schemaValidationErrors = validateSchema(schema);
-	if (schemaValidationErrors.length > 0) {
-		return { errors: schemaValidationErrors };
-	}
+  // Validate Schema
+  const schemaValidationErrors = validateSchema(schema);
+  if (schemaValidationErrors.length > 0) {
+    return { errors: schemaValidationErrors };
+  }
 
-	// Parse
-	let document: DocumentNode;
-	try {
-		document = parse(source);
-	} catch (syntaxError) {
-		return { errors: [syntaxError as GraphQLError] };
-	}
+  // Parse
+  let document: DocumentNode;
+  try {
+    document = parse(source);
+  } catch (syntaxError) {
+    return { errors: [syntaxError as GraphQLError] };
+  }
 
-	// Validate
-	const validationErrors = validate(schema, document);
-	if (validationErrors.length > 0) {
-		return { errors: validationErrors };
-	}
+  // Validate
+  const validationErrors = validate(schema, document);
+  if (validationErrors.length > 0) {
+    return { errors: validationErrors };
+  }
 
-	// Execute
-	return experimentalExecuteIncrementally({
-		schema,
-		document,
-		rootValue,
-		contextValue,
-		variableValues,
-		operationName,
-		fieldResolver,
-		typeResolver,
-	});
+  // Execute
+  return experimentalExecuteIncrementally({
+    schema,
+    document,
+    rootValue,
+    contextValue,
+    variableValues,
+    operationName,
+    fieldResolver,
+    typeResolver,
+  });
 }

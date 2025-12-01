@@ -1,0 +1,266 @@
+[
+  {
+    "data": {
+      "alphabet": {
+        "edges": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjA=",
+            "node": {
+              "id": "QWxwaGFiZXQ6MQ==",
+              "letter": "a",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjE=",
+            "node": {
+              "id": "QWxwaGFiZXQ6Mg==",
+              "letter": "b",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjI=",
+            "node": {
+              "id": "QWxwaGFiZXQ6Mw==",
+              "letter": "c",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjM=",
+            "node": {
+              "id": "QWxwaGFiZXQ6NA==",
+              "letter": "d",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjQ=",
+            "node": {
+              "id": "QWxwaGFiZXQ6NQ==",
+              "letter": "e",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjU=",
+            "node": {
+              "id": "QWxwaGFiZXQ6Ng==",
+              "letter": "f",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjY=",
+            "node": {
+              "id": "QWxwaGFiZXQ6Nw==",
+              "letter": "g",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjc=",
+            "node": {
+              "id": "QWxwaGFiZXQ6OA==",
+              "letter": "h",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjg=",
+            "node": {
+              "id": "QWxwaGFiZXQ6OQ==",
+              "letter": "i",
+              "__typename": "Alphabet"
+            }
+          },
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjk=",
+            "node": {
+              "id": "QWxwaGFiZXQ6MTA=",
+              "letter": "j",
+              "__typename": "Alphabet"
+            }
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": true,
+          "endCursor": "YXJyYXljb25uZWN0aW9uOjk="
+        }
+      }
+    },
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "pageInfo": {
+        "hasNextPage": true,
+        "endCursor": "YXJyYXljb25uZWN0aW9uOjk="
+      }
+    },
+    "path": ["alphabet"],
+    "label": "streamQuery$defer$stream_alphabet$pageInfo",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjA=",
+      "node": {
+        "id": "QWxwaGFiZXQ6MQ==",
+        "letter": "a",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 0],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjE=",
+      "node": {
+        "id": "QWxwaGFiZXQ6Mg==",
+        "letter": "b",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 1],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjI=",
+      "node": {
+        "id": "QWxwaGFiZXQ6Mw==",
+        "letter": "c",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 2],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjM=",
+      "node": {
+        "id": "QWxwaGFiZXQ6NA==",
+        "letter": "d",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 3],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjQ=",
+      "node": {
+        "id": "QWxwaGFiZXQ6NQ==",
+        "letter": "e",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 4],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjU=",
+      "node": {
+        "id": "QWxwaGFiZXQ6Ng==",
+        "letter": "f",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 5],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjY=",
+      "node": {
+        "id": "QWxwaGFiZXQ6Nw==",
+        "letter": "g",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 6],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjc=",
+      "node": {
+        "id": "QWxwaGFiZXQ6OA==",
+        "letter": "h",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 7],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjg=",
+      "node": {
+        "id": "QWxwaGFiZXQ6OQ==",
+        "letter": "i",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 8],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": {
+      "cursor": "YXJyYXljb25uZWN0aW9uOjk=",
+      "node": {
+        "id": "QWxwaGFiZXQ6MTA=",
+        "letter": "j",
+        "__typename": "Alphabet"
+      }
+    },
+    "path": ["alphabet", "edges", 9],
+    "label": "streamQuery$stream$stream_alphabet",
+    "extensions": {
+      "is_final": false
+    }
+  },
+  {
+    "data": null,
+    "extensions": {
+      "is_final": true
+    }
+  }
+]

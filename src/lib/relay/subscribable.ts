@@ -3,32 +3,32 @@
 type GenericFunction = (...args: never[]) => unknown;
 
 export class Subscribable<TListener extends GenericFunction> {
-	protected listeners = new Set<TListener>();
+  protected listeners = new Set<TListener>();
 
-	constructor() {
-		this.subscribe = this.subscribe.bind(this);
-	}
+  constructor() {
+    this.subscribe = this.subscribe.bind(this);
+  }
 
-	subscribe(listener: TListener): () => void {
-		this.listeners.add(listener);
+  subscribe(listener: TListener): () => void {
+    this.listeners.add(listener);
 
-		this.onSubscribe();
+    this.onSubscribe();
 
-		return () => {
-			this.listeners.delete(listener);
-			this.onUnsubscribe();
-		};
-	}
+    return () => {
+      this.listeners.delete(listener);
+      this.onUnsubscribe();
+    };
+  }
 
-	hasListeners(): boolean {
-		return this.listeners.size > 0;
-	}
+  hasListeners(): boolean {
+    return this.listeners.size > 0;
+  }
 
-	protected onSubscribe(): void {
-		// Do nothing
-	}
+  protected onSubscribe(): void {
+    // Do nothing
+  }
 
-	protected onUnsubscribe(): void {
-		// Do nothing
-	}
+  protected onUnsubscribe(): void {
+    // Do nothing
+  }
 }

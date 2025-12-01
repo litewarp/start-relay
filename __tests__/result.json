@@ -1,0 +1,229 @@
+[
+  {
+    "data": {
+      "alphabet": {
+        "edges": []
+      }
+    },
+    "pending": [
+      {
+        "id": "0",
+        "path": ["alphabet", "edges"],
+        "label": "streamQuery$stream$stream_alphabet"
+      },
+      {
+        "id": "1",
+        "path": ["alphabet"],
+        "label": "streamQuery$defer$stream_alphabet$pageInfo"
+      }
+    ],
+    "hasNext": true
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "data": {
+          "pageInfo": {
+            "hasNextPage": true,
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjk="
+          }
+        },
+        "id": "1"
+      }
+    ],
+    "completed": [
+      {
+        "id": "1"
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjA=",
+            "node": {
+              "id": "QWxwaGFiZXQ6MQ==",
+              "letter": "a",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjE=",
+            "node": {
+              "id": "QWxwaGFiZXQ6Mg==",
+              "letter": "b",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjI=",
+            "node": {
+              "id": "QWxwaGFiZXQ6Mw==",
+              "letter": "c",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjM=",
+            "node": {
+              "id": "QWxwaGFiZXQ6NA==",
+              "letter": "d",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjQ=",
+            "node": {
+              "id": "QWxwaGFiZXQ6NQ==",
+              "letter": "e",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjU=",
+            "node": {
+              "id": "QWxwaGFiZXQ6Ng==",
+              "letter": "f",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjY=",
+            "node": {
+              "id": "QWxwaGFiZXQ6Nw==",
+              "letter": "g",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjc=",
+            "node": {
+              "id": "QWxwaGFiZXQ6OA==",
+              "letter": "h",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjg=",
+            "node": {
+              "id": "QWxwaGFiZXQ6OQ==",
+              "letter": "i",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": true,
+    "incremental": [
+      {
+        "id": "0",
+        "items": [
+          {
+            "cursor": "YXJyYXljb25uZWN0aW9uOjk=",
+            "node": {
+              "id": "QWxwaGFiZXQ6MTA=",
+              "letter": "j",
+              "__typename": "Alphabet"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hasNext": false,
+    "completed": [
+      {
+        "id": "0"
+      }
+    ]
+  }
+]
