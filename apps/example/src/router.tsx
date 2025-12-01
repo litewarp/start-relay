@@ -2,13 +2,12 @@ import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { createEnvironment } from '~/lib/relay/environment.ts';
 import { DefaultCatchBoundary } from './components/DefaultCatchBoundary.tsx';
 import { NotFound } from './components/NotFound.tsx';
-import { routerWithRelay } from './lib/relay-streaming/router-with-relay.tsx';
-import { QueryCache } from './lib/relay-streaming/query-cache.ts';
+import { routerWithRelay, createQueryCache } from '@litewarp/tanstack-relay-adapter';
 import { routeTree } from './routeTree.gen.ts';
 
 const IS_SERVER = typeof window === 'undefined';
 
-const queryCache = new QueryCache(IS_SERVER);
+const queryCache = createQueryCache(IS_SERVER);
 const environment = createEnvironment(queryCache, IS_SERVER);
 
 export function getRouter() {

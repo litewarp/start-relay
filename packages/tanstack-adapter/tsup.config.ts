@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup';
 const config = defineConfig({
   entry: ['src/index.ts'],
   clean: true,
-  format: ['esm', 'cjs'],
+  format: ['esm'],
   outDir: 'dist',
   dts: true,
 });

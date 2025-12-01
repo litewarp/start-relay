@@ -36,6 +36,9 @@ importers:
 
   apps/example:
     dependencies:
+      '@litewarp/tanstack-relay-adapter':
+        specifier: workspace:*
+        version: link:../../packages/tanstack-adapter
       '@tanstack/react-router':
         specifier: ^1.135.2
         version: 1.139.12(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
