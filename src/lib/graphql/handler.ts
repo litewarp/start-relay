@@ -1,10 +1,12 @@
-import { handleMaybePromise } from '@whatwg-node/promise-helpers';
 import type {
   InitialIncrementalExecutionResult,
   SubsequentIncrementalExecutionResult,
 } from 'graphql';
 import { graphql } from './executor.ts';
 import { getSchema } from './schema.ts';
+import { Readable } from 'node:stream';
+
+const schema = getSchema();
 
 export async function graphqlHandler<TContext extends Record<string, unknown>>({
   request,
@@ -22,14 +24,6 @@ export async function graphqlHandler<TContext extends Record<string, unknown>>({
   const operationName = req.operationName;
   const rootValue = {};
 
-  const result = await graphql({
-    schema: getSchema(),
-    source: query,
-    variableValues: variables,
-    operationName,
-    contextValue: context,
-    rootValue,
-  });
   const { readable, writable } = new TransformStream();
   const writer = writable.getWriter();
   const encoder = new TextEncoder();
@@ -37,29 +31,36 @@ export async function graphqlHandler<TContext extends Record<string, unknown>>({
   const responseReadable = new ReadableStream({
     async pull(controller) {
       const { done, value } = await reader.read();
-      done ? controller.close() : controller.enqueue(value);
+      if (value) {
+        controller.enqueue(value);
+      }
+      if (done) {
+        controller.close();
+      }
     },
+  });
+  const result = graphql({
+    schema,
+    source: query,
+    variableValues: variables,
+    operationName,
+    contextValue: context,
+    rootValue,
   });
   if ('initialResult' in result) {
     writer.write(encoder.encode('\r\n'));
     writer.write(encoder.encode('---'));
     writePartialResult(result.initialResult, encoder, writer);
 
-    const iterator = result.subsequentResults[Symbol.asyncIterator]();
+    const stream = Readable.from(result.subsequentResults);
+    stream.on('data', (data) => {
+      writePartialResult(data, encoder, writer);
+    });
 
-    handleMaybePromise(
-      () => iterator.next(),
-      ({ done, value }) => {
-        if (value) {
-          console.log('writing data to stream', value);
-          writePartialResult(value, encoder, writer);
-        }
-        if (done) {
-          writer.write(encoder.encode('--\r\n'));
-          writer.close();
-        }
-      },
-    );
+    stream.on('close', () => {
+      writer.write(encoder.encode('--\r\n'));
+      writer.close();
+    });
 
     return new Response(responseReadable, {
       headers: {

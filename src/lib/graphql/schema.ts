@@ -48,12 +48,40 @@ export function getSchema(): GraphQLSchema {
     nodeType: AlphabetType,
   });
 
+  const LanguageType = new GraphQLObjectType({
+    name: 'Language',
+    interfaces: [nodeInterface],
+    fields: () => ({
+      id: globalIdField(),
+      name: {
+        type: new GraphQLNonNull(GraphQLString),
+        resolve: async () => {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          return 'English';
+        },
+      },
+      alphabet: {
+        type: alphabetConnection,
+        args: connectionArgs,
+      },
+    }),
+  });
+
   return new GraphQLSchema({
     directives: [GraphQLDeferDirective, GraphQLStreamDirective, ...specifiedDirectives],
     query: new GraphQLObjectType({
       name: 'Query',
       fields: () => ({
         node: nodeField,
+        language: {
+          type: new GraphQLNonNull(LanguageType),
+          resolve: async () => {
+            return {
+              id: '2',
+              name: 'English',
+            };
+          },
+        },
         alphabet: {
           args: connectionArgs,
           type: alphabetConnection,
@@ -61,14 +89,16 @@ export function getSchema(): GraphQLSchema {
             const result = connectionFromArray(alphabet, args);
             return {
               pageInfo: async () => {
-                await new Promise((resolve) => setTimeout(resolve, 500));
+                await new Promise((resolve) => setTimeout(resolve, 200));
                 return result.pageInfo;
               },
-              edges: async function* () {
-                for (const edge of result.edges) {
-                  yield edge;
-                  await new Promise((resolve) => setTimeout(resolve, 1500));
-                }
+              edges: async () => {
+                const iterator = async function* () {
+                  for (const edge of result.edges) {
+                    yield await new Promise((resolve) => setTimeout(() => resolve(edge), 1000));
+                  }
+                };
+                return iterator();
               },
             };
           },
@@ -86,8 +116,7 @@ export function getSchema(): GraphQLSchema {
           },
           type: new GraphQLNonNull(GraphQLString),
           resolve: async (_, { waitFor }) => {
-            await new Promise((resolve) => setTimeout(resolve, waitFor));
-            return 'Slow Field!';
+            return new Promise((resolve) => setTimeout(() => resolve('Slow Field!'), waitFor));
           },
         },
       }),

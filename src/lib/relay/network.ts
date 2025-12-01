@@ -43,20 +43,27 @@ export class RelayReplayNetwork {
 
       const query = this.queryCache.build(request, variables, cacheConfig, uploadables);
 
-      if (query.hasData) {
+      if (!this._isServer && query.hasData) {
+        // console.log('returning from replay');
         return Observable.create((sink) => {
-          // console.log("returning from replay");
-          query.subscribe(sink);
+          const sub = query.subscribe(sink);
+
+          return () => {
+            sub.unsubscribe();
+          };
         });
       }
 
       const obs = Observable.create((sink) => {
         const transformer = new RelayIncrementalDeliveryTransformer((...args) => {
           if (this._isServer) {
-            this.queryCache.notify({ type: 'data', query, data: args[0] });
+            this.queryCache.notify({ type: 'data', query, data: args });
           }
           sink.next(...args);
         });
+
+        // kick off streaming
+        this.queryCache.notify({ type: 'added', query });
         multipartFetch<InitialIncrementalExecutionResult | SubsequentIncrementalExecutionResult>(
           this._url,
           {
@@ -73,13 +80,18 @@ export class RelayReplayNetwork {
             credentials: this._fetchOpts.credentials,
             signal: this._isServer ? undefined : signal,
             onComplete: () => {
+              if (this._isServer) {
+                this.queryCache.notify({ type: 'complete', query });
+              }
               sink.complete();
             },
             onError: (error) => {
+              if (this._isServer) {
+                this.queryCache.notify({ type: 'error', query, error });
+              }
               sink.error(error);
             },
             onNext: (value) => {
-              console.log('raw value from multipartFetch', value);
               transformer.onNext(value);
             },
           },

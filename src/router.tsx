@@ -1,16 +1,18 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
-import { createEnvironment } from '~/lib/relay/environment.ts';
+import { createEnvironment } from '~/lib/relay-streaming/environment.ts';
 import { DefaultCatchBoundary } from './components/DefaultCatchBoundary.tsx';
 import { NotFound } from './components/NotFound.tsx';
-import { createRelayRouter } from './lib/relay/create-relay-router.tsx';
-import { QueryCache } from './lib/relay/query-cache.ts';
+import { routerWithRelay } from './lib/relay-streaming/router-with-relay.tsx';
+import { QueryCache } from './lib/relay-streaming/query-cache.ts';
 import { routeTree } from './routeTree.gen.ts';
 
-const queryCache = new QueryCache();
-const environment = createEnvironment(queryCache);
+const IS_SERVER = typeof window === 'undefined';
+
+const queryCache = new QueryCache(IS_SERVER);
+const environment = createEnvironment(queryCache, IS_SERVER);
 
 export function getRouter() {
-  return createRelayRouter(
+  return routerWithRelay(
     createTanStackRouter({
       routeTree,
       defaultPreload: 'intent',
@@ -24,7 +26,7 @@ export function getRouter() {
       },
     }),
     environment,
-    { queryCache },
+    queryCache,
   );
 }
 

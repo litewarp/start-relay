@@ -2,6 +2,7 @@ import type { Environment, GraphQLTaggedNode } from 'react-relay';
 import relay from 'react-relay';
 import runtime, {
   type CacheConfig,
+  type GraphQLResponse,
   type OperationType,
   type RequestParameters,
   type VariablesOf,
@@ -13,7 +14,7 @@ const { getRequest } = runtime;
 export interface SerializablePreloadedQuery<TQuery extends OperationType> {
   params: RequestParameters;
   variables: VariablesOf<TQuery>;
-  response: TQuery['response'];
+  response: GraphQLResponse[];
 }
 
 export const createPreloader = (environment: Environment) => {
@@ -23,8 +24,7 @@ export const createPreloader = (environment: Environment) => {
     networkCacheConfig?: CacheConfig,
   ) => {
     return loadQuery<TQuery>(environment, getRequest(node), variables, {
-      fetchPolicy: 'store-or-network',
-      ...networkCacheConfig,
+      networkCacheConfig,
     });
   };
 

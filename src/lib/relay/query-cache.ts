@@ -62,16 +62,49 @@ export interface QueryStore {
 
 export class QueryCache extends Subscribable<DispatchFn> {
   queries: QueryStore;
+  serverStreamingQueries: Set<string>;
+  _onStreamingEnd: () => void;
 
   constructor() {
     super();
     this.queries = new Map<string, RelayQuery>();
+    this.serverStreamingQueries = new Set<string>();
+    this._onStreamingEnd = () => {};
   }
 
   notify(event: QueryCacheNotifyEvent): void {
+    const query = this.queries.get(event.query.queryId);
+    if (!query) {
+      throw new Error(`Query with ID ${event.query.queryId} not found`);
+    }
+    switch (event.type) {
+      case 'added':
+        this.serverStreamingQueries.add(event.query.queryId);
+        query.startStream();
+        break;
+      case 'data':
+        // no op
+        // consider replaying server side?
+        break;
+      case 'error':
+        this.serverStreamingQueries.delete(event.query.queryId);
+        query.error(event.error);
+        break;
+      case 'complete':
+        query.complete();
+        this.serverStreamingQueries.delete(event.query.queryId);
+        break;
+    }
+
     this.listeners.forEach((listener) => {
       listener(event);
     });
+
+    // if serverStreamingQueries is empty
+    // run complete cb
+    if (this.serverStreamingQueries.size === 0) {
+      this._onStreamingEnd();
+    }
   }
 
   build(
@@ -98,5 +131,9 @@ export class QueryCache extends Subscribable<DispatchFn> {
 
   get(queryId: string): RelayQuery | undefined {
     return this.queries.get(queryId);
+  }
+
+  onStreamingEnd(cb: () => void): void {
+    this._onStreamingEnd = cb;
   }
 }

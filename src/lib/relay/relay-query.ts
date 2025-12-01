@@ -1,9 +1,10 @@
-import type {
-  CacheConfig,
-  GraphQLResponse,
-  RequestParameters,
-  UploadableMap,
-  Variables,
+import {
+  Observable,
+  type CacheConfig,
+  type GraphQLResponse,
+  type RequestParameters,
+  type UploadableMap,
+  type Variables,
 } from 'relay-runtime';
 import { ReplaySubject } from 'relay-runtime';
 import type { Sink, Subscription } from 'relay-runtime/lib/network/RelayObservable.js';
@@ -28,7 +29,9 @@ export class RelayQuery {
   uploadables?: UploadableMap | null;
   replaySubject: ReplaySubject<GraphQLResponse>;
   hasData?: boolean = false;
+  isServerStreaming?: boolean = false;
   isComplete?: boolean = false;
+  stream?: ReadableStream<GraphQLResponse[]>;
 
   constructor(config: RelayQueryConfig) {
     const { request, variables, cacheConfig, uploadables } = config;
@@ -44,13 +47,18 @@ export class RelayQuery {
     return this.request.operationKind === 'query';
   }
 
+  startStream() {
+    this.isServerStreaming = true;
+  }
+
   next(val: GraphQLResponse) {
     this.replaySubject.next(val);
     this.hasData = true;
   }
 
   error(err: Error) {
-    console.log('error', err);
+    this.replaySubject.error(err);
+    this.isComplete = true;
   }
 
   complete() {
@@ -60,5 +68,11 @@ export class RelayQuery {
 
   subscribe(observer: Sink<GraphQLResponse>): Subscription {
     return this.replaySubject.subscribe(observer);
+  }
+
+  replay(): Observable<GraphQLResponse> {}
+
+  setStream(stream: ReadableStream<GraphQLResponse[]>) {
+    this.stream = stream;
   }
 }
