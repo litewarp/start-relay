@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7ad9f2a411e07529f4eb2a7d96096ac1>>
+ * @generated SignedSource<<51d051420c05efe11cf6c57128f10925>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,13 +10,13 @@
 
 import type { ConcreteRequest } from 'relay-runtime';
 import type { FragmentRefs } from "relay-runtime";
-export type relayPageQuery$variables = Record<PropertyKey, never>;
-export type relayPageQuery$data = {
-  readonly " $fragmentSpreads": FragmentRefs<"relayFastFragment" | "relayFragment">;
+export type deferPageQuery$variables = Record<PropertyKey, never>;
+export type deferPageQuery$data = {
+  readonly " $fragmentSpreads": FragmentRefs<"deferFastFragment" | "deferSlowFragment">;
 };
-export type relayPageQuery = {
-  response: relayPageQuery$data;
-  variables: relayPageQuery$variables;
+export type deferPageQuery = {
+  response: deferPageQuery$data;
+  variables: deferPageQuery$variables;
 };
 
 const node: ConcreteRequest = {
@@ -24,12 +24,12 @@ const node: ConcreteRequest = {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "relayPageQuery",
+    "name": "deferPageQuery",
     "selections": [
       {
         "args": null,
         "kind": "FragmentSpread",
-        "name": "relayFastFragment"
+        "name": "deferFastFragment"
       },
       {
         "kind": "Defer",
@@ -37,7 +37,7 @@ const node: ConcreteRequest = {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "relayFragment"
+            "name": "deferSlowFragment"
           }
         ]
       }
@@ -49,7 +49,7 @@ const node: ConcreteRequest = {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "relayPageQuery",
+    "name": "deferPageQuery",
     "selections": [
       {
         "alias": null,
@@ -61,7 +61,7 @@ const node: ConcreteRequest = {
       {
         "if": null,
         "kind": "Defer",
-        "label": "relayPageQuery$defer$relayFragment",
+        "label": "deferPageQuery$defer$deferSlowFragment",
         "selections": [
           {
             "alias": null,
@@ -81,15 +81,15 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "778bbbd29870a8cd22d990c0386eba10",
+    "cacheID": "f104fda8dcbbc4e6f93a4fde4379b4e4",
     "id": null,
     "metadata": {},
-    "name": "relayPageQuery",
+    "name": "deferPageQuery",
     "operationKind": "query",
-    "text": "query relayPageQuery {\n  ...relayFastFragment\n  ...relayFragment @defer(label: \"relayPageQuery$defer$relayFragment\", if: true)\n}\n\nfragment relayFastFragment on Query {\n  fastField\n}\n\nfragment relayFragment on Query {\n  slowField(waitFor: 5000)\n}\n"
+    "text": "query deferPageQuery {\n  ...deferFastFragment\n  ...deferSlowFragment @defer(label: \"deferPageQuery$defer$deferSlowFragment\", if: true)\n}\n\nfragment deferFastFragment on Query {\n  fastField\n}\n\nfragment deferSlowFragment on Query {\n  slowField(waitFor: 5000)\n}\n"
   }
 };
 
-(node as any).hash = "2c16f16b8d97c124d5739419181c2b9a";
+(node as any).hash = "6fe5c04fba0a181250c8df9fac091197";
 
 export default node;

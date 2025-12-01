@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StreamRouteImport } from './routes/stream'
-import { Route as RelayRouteImport } from './routes/relay'
+import { Route as DeferRouteImport } from './routes/defer'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiGraphqlRouteImport } from './routes/api/graphql'
 
@@ -19,9 +19,9 @@ const StreamRoute = StreamRouteImport.update({
   path: '/stream',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RelayRoute = RelayRouteImport.update({
-  id: '/relay',
-  path: '/relay',
+const DeferRoute = DeferRouteImport.update({
+  id: '/defer',
+  path: '/defer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,34 +37,34 @@ const ApiGraphqlRoute = ApiGraphqlRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/relay': typeof RelayRoute
+  '/defer': typeof DeferRoute
   '/stream': typeof StreamRoute
   '/api/graphql': typeof ApiGraphqlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/relay': typeof RelayRoute
+  '/defer': typeof DeferRoute
   '/stream': typeof StreamRoute
   '/api/graphql': typeof ApiGraphqlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/relay': typeof RelayRoute
+  '/defer': typeof DeferRoute
   '/stream': typeof StreamRoute
   '/api/graphql': typeof ApiGraphqlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/relay' | '/stream' | '/api/graphql'
+  fullPaths: '/' | '/defer' | '/stream' | '/api/graphql'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/relay' | '/stream' | '/api/graphql'
-  id: '__root__' | '/' | '/relay' | '/stream' | '/api/graphql'
+  to: '/' | '/defer' | '/stream' | '/api/graphql'
+  id: '__root__' | '/' | '/defer' | '/stream' | '/api/graphql'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  RelayRoute: typeof RelayRoute
+  DeferRoute: typeof DeferRoute
   StreamRoute: typeof StreamRoute
   ApiGraphqlRoute: typeof ApiGraphqlRoute
 }
@@ -78,11 +78,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StreamRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/relay': {
-      id: '/relay'
-      path: '/relay'
-      fullPath: '/relay'
-      preLoaderRoute: typeof RelayRouteImport
+    '/defer': {
+      id: '/defer'
+      path: '/defer'
+      fullPath: '/defer'
+      preLoaderRoute: typeof DeferRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,7 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  RelayRoute: RelayRoute,
+  DeferRoute: DeferRoute,
   StreamRoute: StreamRoute,
   ApiGraphqlRoute: ApiGraphqlRoute,
 }

@@ -1,28 +1,28 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import relay from 'react-relay';
-import type { relayFragment$key } from '~relay/relayFragment.graphql.ts';
-import type { relayFastFragment$key } from '~relay/relayFastFragment.graphql.ts';
-import { type relayPageQuery } from '~relay/relayPageQuery.graphql.ts';
+import type { deferSlowFragment$key } from '~relay/deferSlowFragment.graphql.ts';
+import type { deferFastFragment$key } from '~relay/deferFastFragment.graphql.ts';
+import { type deferPageQuery } from '~relay/deferPageQuery.graphql.ts';
 
 const { graphql, useLazyLoadQuery, useFragment } = relay;
 
 const query = graphql`
-  query relayPageQuery {
-    ...relayFastFragment
-    ...relayFragment @defer(if: true)
+  query deferPageQuery {
+    ...deferFastFragment
+    ...deferSlowFragment @defer(if: true)
   }
 `;
 
-export const Route = createFileRoute('/relay')({
+export const Route = createFileRoute('/defer')({
   loader: ({ context }) => {
-    context.preloadQuery(query, {});
+    return context.preloadQuery(query, {});
   },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const data = useLazyLoadQuery<relayPageQuery>(query, {}, {});
+  const data = useLazyLoadQuery<deferPageQuery>(query, {}, {});
 
   return (
     <div className="flex flex-col p-8 gap-y-2">
@@ -44,10 +44,10 @@ function RouteComponent() {
   );
 }
 
-function FastFragment(props: { query: relayFastFragment$key }) {
+function FastFragment(props: { query: deferFastFragment$key }) {
   const data = useFragment(
     graphql`
-      fragment relayFastFragment on Query {
+      fragment deferFastFragment on Query {
         fastField
       }
     `,
@@ -57,10 +57,10 @@ function FastFragment(props: { query: relayFastFragment$key }) {
   return <>{data.fastField}</>;
 }
 
-function AlphaFragment(props: { query: relayFragment$key }) {
+function AlphaFragment(props: { query: deferSlowFragment$key }) {
   const data = useFragment(
     graphql`
-      fragment relayFragment on Query {
+      fragment deferSlowFragment on Query {
         slowField(waitFor: 5000)
       }
     `,

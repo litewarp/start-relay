@@ -3,15 +3,33 @@ import { createSerializationAdapter } from '@tanstack/react-router';
 import type { StreamedPreloadedQuery } from './preloaded-query.ts';
 import { QueryCache } from './query-cache.ts';
 
+const dehydratedOmittedKeys = new Set([
+  'dispose',
+  'environment',
+  'isDisposed',
+  'networkError',
+  'releaseQuery',
+  'source',
+]);
+
 export type DehydratedPreloadedQuery<TQuery extends OperationType> = Omit<
   StreamedPreloadedQuery<TQuery>,
   'dispose' | 'environment' | 'isDisposed' | 'networkError' | 'releaseQuery' | 'source'
 >;
 
+const isStreamedPreloadedQuery = <TQuery extends OperationType>(
+  value: unknown,
+): value is StreamedPreloadedQuery<TQuery> => {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    Object.keys(value).some((key) => dehydratedOmittedKeys.has(key))
+  );
+};
+
 export function dehydratePreloadedQuery<TQuery extends OperationType>(
   preloadedQuery: StreamedPreloadedQuery<TQuery>,
 ): DehydratedPreloadedQuery<TQuery> {
-  console.log('dehydrating query');
   return {
     kind: preloadedQuery.kind,
     environmentProviderOptions: preloadedQuery.environmentProviderOptions,
@@ -21,7 +39,9 @@ export function dehydratePreloadedQuery<TQuery extends OperationType>(
     id: preloadedQuery.id,
     name: preloadedQuery.name,
     variables: preloadedQuery.variables,
-    $__relay_queryRef: preloadedQuery.$__relay_queryRef,
+    $__relay_queryRef: {
+      operation: preloadedQuery.$__relay_queryRef.operation,
+    },
   };
 }
 
@@ -59,12 +79,6 @@ export function hydratePreloadedQuery<TQuery extends OperationType>(
     $__relay_queryRef: dehydratedQuery.$__relay_queryRef,
   };
 }
-
-const isStreamedPreloadedQuery = <TQuery extends OperationType>(
-  value: unknown,
-): value is StreamedPreloadedQuery<TQuery> => {
-  return value !== null && typeof value === 'object' && '$__relay_queryRef' in value;
-};
 
 export function createPreloadedQuerySerializer<TQuery extends OperationType>(
   environment: Environment,

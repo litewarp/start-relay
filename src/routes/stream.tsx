@@ -14,7 +14,7 @@ const query = graphql`
 
 export const Route = createFileRoute('/stream')({
   loader: async ({ context }) => {
-    context.preloadQuery(query, {});
+    return context.preloadQuery(query, {});
   },
   component: RouteComponent,
 });

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4f255f194f3159ae11cafb6e5d64a0eb>>
+ * @generated SignedSource<<019859a147785cbe0f8f85908a5f729d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,20 +10,20 @@
 
 import type { ReaderFragment } from 'relay-runtime';
 import type { FragmentRefs } from "relay-runtime";
-export type relayFragment$data = {
+export type deferSlowFragment$data = {
   readonly slowField: string;
-  readonly " $fragmentType": "relayFragment";
+  readonly " $fragmentType": "deferSlowFragment";
 };
-export type relayFragment$key = {
-  readonly " $data"?: relayFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"relayFragment">;
+export type deferSlowFragment$key = {
+  readonly " $data"?: deferSlowFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"deferSlowFragment">;
 };
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "relayFragment",
+  "name": "deferSlowFragment",
   "selections": [
     {
       "alias": null,
@@ -43,6 +43,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "ce423a54088459e10cede93470c42ca8";
+(node as any).hash = "76ffdaef4e904bed47a6fb64d858ae1d";
 
 export default node;

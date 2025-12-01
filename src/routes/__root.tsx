@@ -73,13 +73,21 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             activeProps={{
               className: 'font-bold',
             }}
-            to="/relay"
+            to="/defer"
           >
-            Relay Example
+            Defer Example
+          </Link>{' '}
+          <Link
+            activeProps={{
+              className: 'font-bold',
+            }}
+            to="/stream"
+          >
+            Stream Example
           </Link>{' '}
         </div>
         <hr />
-        {children}
+        <div className="flex w-full h-full max-h-screen p-8">{children}</div>
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>
