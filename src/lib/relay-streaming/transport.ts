@@ -88,11 +88,9 @@ export class ServerTransport implements DataTransportAbstraction {
       this.ongoingStreams.delete(event);
       this.closeIfFinished();
     };
-    console.log('subscribing to replaySubject');
     replaySubject.subscribe({
       next: (ev) => {
         if (!this.closed) {
-          console.log('streaming event', ev);
           this.controller.enqueue(ev);
         }
       },

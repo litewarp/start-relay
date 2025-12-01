@@ -96,7 +96,6 @@ export function getSchema(): GraphQLSchema {
           type: alphabetConnection,
           resolve: async function (_source, args) {
             const result = connectionFromArray(alphabet, args);
-            console.log('alphabetResult', result);
             return {
               pageInfo: async () => {
                 await new Promise((resolve) => setTimeout(resolve, 200));

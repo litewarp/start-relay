@@ -93,7 +93,6 @@ export class RelayReplayNetwork {
               replaySubject.error(err);
             },
             onNext: (value) => {
-              console.log('raw fetch', value);
               transformer.onNext(value);
             },
           },
