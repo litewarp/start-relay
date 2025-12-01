@@ -39,7 +39,7 @@ export async function graphqlHandler<TContext extends Record<string, unknown>>({
       }
     },
   });
-  const result = graphql({
+  const result = await graphql({
     schema,
     source: query,
     variableValues: variables,

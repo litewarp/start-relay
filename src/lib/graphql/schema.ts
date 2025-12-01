@@ -52,7 +52,7 @@ export function getSchema(): GraphQLSchema {
     name: 'Language',
     interfaces: [nodeInterface],
     fields: () => ({
-      id: globalIdField(),
+      id: { ...globalIdField(), resolve: () => '1' },
       name: {
         type: new GraphQLNonNull(GraphQLString),
         resolve: async () => {
@@ -63,6 +63,21 @@ export function getSchema(): GraphQLSchema {
       alphabet: {
         type: alphabetConnection,
         args: connectionArgs,
+        resolve: async (_source, args) => {
+          const result = connectionFromArray(alphabet, args);
+          return {
+            pageInfo: async () => {
+              await new Promise((resolve) => setTimeout(resolve, 200));
+              return result.pageInfo;
+            },
+            edges: async function* () {
+              for (const edge of result.edges) {
+                yield edge;
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+              }
+            },
+          };
+        },
       },
     }),
   });
@@ -75,30 +90,23 @@ export function getSchema(): GraphQLSchema {
         node: nodeField,
         language: {
           type: new GraphQLNonNull(LanguageType),
-          resolve: async () => {
-            return {
-              id: '2',
-              name: 'English',
-            };
-          },
         },
         alphabet: {
           args: connectionArgs,
           type: alphabetConnection,
-          resolve: async (_source, args) => {
+          resolve: async function (_source, args) {
             const result = connectionFromArray(alphabet, args);
+            console.log('alphabetResult', result);
             return {
               pageInfo: async () => {
                 await new Promise((resolve) => setTimeout(resolve, 200));
                 return result.pageInfo;
               },
-              edges: async () => {
-                const iterator = async function* () {
-                  for (const edge of result.edges) {
-                    yield await new Promise((resolve) => setTimeout(() => resolve(edge), 1000));
-                  }
-                };
-                return iterator();
+              edges: async function* () {
+                for (const edge of result.edges) {
+                  yield edge;
+                  await new Promise((resolve) => setTimeout(resolve, 1000));
+                }
               },
             };
           },

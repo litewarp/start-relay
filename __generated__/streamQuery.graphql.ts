@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ed3632dfc84f406859ba16f831de8641>>
+ * @generated SignedSource<<6d60b059d4d908c10e84ff76615da65e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,21 +10,9 @@
 
 import type { ConcreteRequest } from 'relay-runtime';
 import type { FragmentRefs } from "relay-runtime";
-export type streamQuery$variables = {
-  count: number;
-  cursor?: string | null | undefined;
-};
+export type streamQuery$variables = Record<PropertyKey, never>;
 export type streamQuery$data = {
-  readonly alphabet: {
-    readonly edges: ReadonlyArray<{
-      readonly cursor: string;
-      readonly " $fragmentSpreads": FragmentRefs<"LetterFragment">;
-    } | null | undefined> | null | undefined;
-    readonly pageInfo: {
-      readonly endCursor: string | null | undefined;
-      readonly hasNextPage: boolean;
-    };
-  } | null | undefined;
+  readonly " $fragmentSpreads": FragmentRefs<"streamAlphabet_Query">;
 };
 export type streamQuery = {
   response: streamQuery$data;
@@ -34,124 +22,22 @@ export type streamQuery = {
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "count"
-  },
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "cursor"
-  }
-],
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "cursor",
-  "storageKey": null
-},
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "__typename",
-  "storageKey": null
-},
-v3 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "PageInfo",
-    "kind": "LinkedField",
-    "name": "pageInfo",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "hasNextPage",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "endCursor",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-],
-v4 = [
-  {
-    "kind": "Variable",
-    "name": "after",
-    "variableName": "cursor"
-  },
-  {
-    "kind": "Variable",
+    "kind": "Literal",
     "name": "first",
-    "variableName": "count"
+    "value": 10
   }
 ];
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "streamQuery",
     "selections": [
       {
-        "alias": "alphabet",
         "args": null,
-        "concreteType": "AlphabetConnection",
-        "kind": "LinkedField",
-        "name": "__stream_alphabet_connection",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "Stream",
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "AlphabetEdge",
-                "kind": "LinkedField",
-                "name": "edges",
-                "plural": true,
-                "selections": [
-                  (v1/*: any*/),
-                  {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "LetterFragment"
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Alphabet",
-                    "kind": "LinkedField",
-                    "name": "node",
-                    "plural": false,
-                    "selections": [
-                      (v2/*: any*/)
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ]
-          },
-          {
-            "kind": "Defer",
-            "selections": (v3/*: any*/)
-          }
-        ],
-        "storageKey": null
+        "kind": "FragmentSpread",
+        "name": "streamAlphabet_Query"
       }
     ],
     "type": "Query",
@@ -159,13 +45,13 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [],
     "kind": "Operation",
     "name": "streamQuery",
     "selections": [
       {
         "alias": null,
-        "args": (v4/*: any*/),
+        "args": (v0/*: any*/),
         "concreteType": "AlphabetConnection",
         "kind": "LinkedField",
         "name": "alphabet",
@@ -174,7 +60,7 @@ return {
           {
             "if": null,
             "kind": "Stream",
-            "label": "streamQuery$stream$stream_alphabet",
+            "label": "streamAlphabet_Query$stream$stream_alphabet",
             "selections": [
               {
                 "alias": null,
@@ -184,7 +70,13 @@ return {
                 "name": "edges",
                 "plural": true,
                 "selections": [
-                  (v1/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "cursor",
+                    "storageKey": null
+                  },
                   {
                     "alias": null,
                     "args": null,
@@ -207,7 +99,13 @@ return {
                         "name": "letter",
                         "storageKey": null
                       },
-                      (v2/*: any*/)
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "__typename",
+                        "storageKey": null
+                      }
                     ],
                     "storageKey": null
                   }
@@ -219,15 +117,41 @@ return {
           {
             "if": null,
             "kind": "Defer",
-            "label": "streamQuery$defer$stream_alphabet$pageInfo",
-            "selections": (v3/*: any*/)
+            "label": "streamAlphabet_Query$defer$stream_alphabet$pageInfo",
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "PageInfo",
+                "kind": "LinkedField",
+                "name": "pageInfo",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "endCursor",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "hasNextPage",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ]
           }
         ],
-        "storageKey": null
+        "storageKey": "alphabet(first:10)"
       },
       {
         "alias": null,
-        "args": (v4/*: any*/),
+        "args": (v0/*: any*/),
         "filters": null,
         "handle": "connection",
         "key": "stream_alphabet",
@@ -237,28 +161,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b776687a1fa906239947ee0305a10af8",
+    "cacheID": "d6e1a7c2b01f2f0e359f0be21522e0f4",
     "id": null,
-    "metadata": {
-      "connection": [
-        {
-          "count": "count",
-          "cursor": "cursor",
-          "direction": "forward",
-          "path": [
-            "alphabet"
-          ],
-          "stream": true
-        }
-      ]
-    },
+    "metadata": {},
     "name": "streamQuery",
     "operationKind": "query",
-    "text": "query streamQuery(\n  $count: Int!\n  $cursor: String\n) {\n  alphabet(first: $count, after: $cursor) {\n    edges @stream(label: \"streamQuery$stream$stream_alphabet\", initialCount: 2) {\n      cursor\n      ...LetterFragment\n      node {\n        __typename\n        id\n      }\n    }\n    ... @defer(label: \"streamQuery$defer$stream_alphabet$pageInfo\") {\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n}\n\nfragment LetterFragment on AlphabetEdge {\n  node {\n    id\n    letter\n  }\n}\n"
+    "text": "query streamQuery {\n  ...streamAlphabet_Query\n}\n\nfragment streamAlphabet_Query on Query {\n  alphabet(first: 10) {\n    edges @stream(label: \"streamAlphabet_Query$stream$stream_alphabet\", initialCount: 0) {\n      cursor\n      node {\n        id\n        letter\n        __typename\n      }\n    }\n    ... @defer(label: \"streamAlphabet_Query$defer$stream_alphabet$pageInfo\") {\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "191e8adec76f75b86676b0229f1093d8";
+(node as any).hash = "3858824dd0607a5a8d5811f11906a6ff";
 
 export default node;
