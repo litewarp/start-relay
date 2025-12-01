@@ -3,13 +3,18 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "dev": "turbo run dev relay",
+    "format": "prettier --write ."
+  },
   "devDependencies": {
     "@prettier/plugin-oxc": "^0.0.5",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "concurrently": "^9.2.1",
     "oxlint": "^1.29.0",
     "prettier": "^3.6.2",
+    "turbo": "^2.6.1",
     "typescript": "^5.9.3"
-  }
+  },
+  "packageManager": "pnpm@10.24.0"
 }

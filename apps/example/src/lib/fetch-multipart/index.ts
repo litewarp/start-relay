@@ -1,6 +1,5 @@
 import { PatchResolver } from './patch-resolver.ts';
 import { observableFromStream } from '../relay-streaming/stream-utils.ts';
-import type { ZodIssueCode } from 'zod'
 
 function getBoundary(contentType = '') {
   const contentTypeParts = contentType.split(';');
@@ -24,6 +23,7 @@ export async function multipartFetch<T>(
     onError: (error: Error) => void;
   },
 ) {
+  console.log(url);
   const { onNext, onComplete, onError, ...fetchOptions } = options;
   const response = await fetch(url, fetchOptions);
   const contentType = (!!response.headers && response.headers.get('Content-Type')) || '';

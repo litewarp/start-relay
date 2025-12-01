@@ -1,15 +1,12 @@
 {
-  "name": "tanstack-start-example-basic",
+  "name": "@litewarp/tanstack-start-relay-example",
   "private": true,
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"pnpm:dev:*\" --raw --kill-others --names",
-    "dev:relay": "relay-compiler --watch",
-    "dev:vite": "vite dev",
+    "dev": "vite dev",
+    "relay": "relay-compiler --watch",
     "check": "oxlint --fix .",
-    "format": "prettier --write .",
-    "codegen": "graphql-codegen-esm --config graphql.codegen.ts",
     "build": "vite build && tsc --noEmit",
     "start": "node .output/server/index.mjs"
   },

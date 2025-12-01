@@ -9,7 +9,7 @@ export const createEnvironment = (queryCache: QueryCache, isServer: boolean) => 
       queryCache,
       isServer,
       fetchOpts: { credentials: 'include' },
-      url: '/api/graphql',
+      url: 'http://localhost:3000/api/graphql',
     }),
     store: new Store(new RecordSource()),
     isServer,
