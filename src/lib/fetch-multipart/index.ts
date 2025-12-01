@@ -1,5 +1,6 @@
 import { PatchResolver } from './patch-resolver.ts';
-import { observableFromStream } from './stream.ts';
+import { observableFromStream } from '../relay-streaming/stream-utils.ts';
+import type { ZodIssueCode } from 'zod'
 
 function getBoundary(contentType = '') {
   const contentTypeParts = contentType.split(';');
