@@ -1,3 +1,29 @@
+import { Observable } from 'relay-runtime';
+import type { RelayObservable } from 'relay-runtime/lib/network/RelayObservable.js';
+
+export function observableFromStream<T>(stream: ReadableStream<T>): RelayObservable<T> {
+  return Observable.create<T>((subscriber) => {
+    stream.pipeTo(
+      new WritableStream({
+        write: (chunk) => {
+          subscriber.next(chunk);
+        },
+        abort: (error) => {
+          subscriber.error(error);
+        },
+        close: () => {
+          subscriber.complete();
+        },
+      }),
+    );
+    return () => {
+      if (!stream.locked) {
+        stream.cancel();
+      }
+    };
+  });
+}
+
 /**
  * Creates a callback with backpressure support.
  *
