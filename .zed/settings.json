@@ -1,0 +1,9 @@
+{
+  "lsp": {
+    "relay": {
+      "settings": {
+        "rootDirectory": "./apps/example"
+      }
+    }
+  }
+}
