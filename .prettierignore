@@ -1,0 +1,12 @@
+# pnpm
+pnpm-lock.yaml
+
+# relay generated queries
+__generated__
+dist
+
+# tanstack router
+**/routeTree.gen.ts
+
+# generated graphql schema
+apps/example/schema.graphql

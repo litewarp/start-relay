@@ -2,7 +2,7 @@
 
 Check out the example at `/apps/example`
 
-The relay adapter is exported from `/packages/tanstack-adapter` which is an internal package at the moment. Will consider publishing it if there is interest. 
+The relay adapter is exported from `/packages/tanstack-adapter` which is an internal package at the moment. Will consider publishing it if there is interest.
 
 ## To Use in a Tanstack App
 
