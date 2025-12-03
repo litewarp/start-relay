@@ -1,21 +1,28 @@
-import type { StreamedPreloadedQuery } from './preloaded-query.ts';
-import { QueryCache } from './query-cache.ts';
+import type { StreamedPreloadedQuery } from "./preloaded-query.ts";
+import { QueryCache } from "./query-cache.ts";
 
-import { createSerializationAdapter } from '@tanstack/react-router';
-import { type Environment, type OperationType } from 'relay-runtime';
+import { createSerializationAdapter } from "@tanstack/react-router";
+import { type Environment, type OperationType } from "relay-runtime";
+
+import { debug } from "./debug.ts";
 
 const dehydratedOmittedKeys = new Set([
-  'dispose',
-  'environment',
-  'isDisposed',
-  'networkError',
-  'releaseQuery',
-  'source',
+  "dispose",
+  "environment",
+  "isDisposed",
+  "networkError",
+  "releaseQuery",
+  "source",
 ]);
 
 export type DehydratedPreloadedQuery<TQuery extends OperationType> = Omit<
   StreamedPreloadedQuery<TQuery>,
-  'dispose' | 'environment' | 'isDisposed' | 'networkError' | 'releaseQuery' | 'source'
+  | "dispose"
+  | "environment"
+  | "isDisposed"
+  | "networkError"
+  | "releaseQuery"
+  | "source"
 >;
 
 const isStreamedPreloadedQuery = <TQuery extends OperationType>(
@@ -23,7 +30,7 @@ const isStreamedPreloadedQuery = <TQuery extends OperationType>(
 ): value is StreamedPreloadedQuery<TQuery> => {
   return (
     value !== null &&
-    typeof value === 'object' &&
+    typeof value === "object" &&
     Object.keys(value).some((key) => dehydratedOmittedKeys.has(key))
   );
 };
@@ -54,7 +61,7 @@ export function hydratePreloadedQuery<TQuery extends OperationType>(
   let isDisposed = false;
   let isReleased = false;
 
-  console.log('hydrating query');
+  debug.log("hydrating query");
   // build the query on the client
   const _query = queryCache.build(dehydratedQuery.$__relay_queryRef.operation);
 
@@ -89,7 +96,7 @@ export function createPreloadedQuerySerializer<TQuery extends OperationType>(
     StreamedPreloadedQuery<TQuery>,
     DehydratedPreloadedQuery<TQuery>
   >({
-    key: 'relay-ssr-preloaded-query',
+    key: "relay-ssr-preloaded-query",
     test: isStreamedPreloadedQuery,
     // @ts-expect-error tanstack-serialization
     toSerializable: (value) => {

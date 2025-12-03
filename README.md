@@ -14,7 +14,7 @@ import { Environment, RecordSource, Store } from 'relay-runtime';
 import { RelayReplayNetwork, type QueryCache } from '@litewarp/tanstack-relay-adapter';
 
 export const createEnvironment = (queryCache: QueryCache, isServer: boolean) => {
-  // console.log(`New environment created in ${typeof window === "undefined" ? "server" : "client"}`);
+  // debug(`New environment created in ${typeof window === "undefined" ? "server" : "client"}`);
   return new Environment({
     network: new RelayReplayNetwork({
       queryCache,
@@ -262,7 +262,7 @@ export function hydratePreloadedQuery<TQuery extends OperationType>(
   let isDisposed = false;
   let isReleased = false;
 
-  console.log('hydrating query');
+  debug('hydrating query');
   // build the query on the client
   const _query = queryCache.build(dehydratedQuery.$__relay_queryRef.operation);
 
@@ -376,7 +376,7 @@ export const transportSerializationAdapter = createSerializationAdapter<
   // if we are on the client, check to see if we have a cached response
   const query = this.queryCache.get(queryKey);
   if (query) {
-    // console.log('returning from replay');
+    // debug('returning from replay');
     return Observable.create<GraphQLResponse>((sink) => {
       return query.replaySubject.subscribe({
         next: (data) => {

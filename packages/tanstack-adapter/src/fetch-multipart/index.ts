@@ -1,38 +1,43 @@
-import { observableFromStream } from '../stream-utils.ts';
-import { PatchResolver } from './patch-resolver.ts';
+import { observableFromStream } from "../stream-utils.ts";
+import { PatchResolver } from "./patch-resolver.ts";
+import { debug } from "../debug.ts";
 
-function getBoundary(contentType = '') {
-  const contentTypeParts = contentType.split(';');
+function getBoundary(contentType = "") {
+  const contentTypeParts = contentType.split(";");
   for (const contentTypePart of contentTypeParts) {
-    const [key, value] = (contentTypePart || '').trim().split('=');
-    if (key === 'boundary' && !!value) {
+    const [key, value] = (contentTypePart || "").trim().split("=");
+    if (key === "boundary" && !!value) {
       if (value[0] === '"' && value[value.length - 1] === '"') {
         return value.substring(1, value.length - 1);
       }
       return value;
     }
   }
-  return '-';
+  return "-";
 }
 
 export async function multipartFetch<T>(
   url: string,
-  options: Pick<RequestInit, 'method' | 'headers' | 'credentials' | 'body' | 'signal'> & {
+  options: Pick<
+    RequestInit,
+    "method" | "headers" | "credentials" | "body" | "signal"
+  > & {
     onNext: (patch: T[], options: { responseHeaders: Headers }) => void;
     onComplete: () => void;
     onError: (error: Error) => void;
   },
 ) {
-  console.log(url);
+  debug(url);
   const { onNext, onComplete, onError, ...fetchOptions } = options;
   const response = await fetch(url, fetchOptions);
-  const contentType = (!!response.headers && response.headers.get('Content-Type')) || '';
+  const contentType =
+    (!!response.headers && response.headers.get("Content-Type")) || "";
   // @defer uses multipart responses to stream patches over HTTP
-  if (response.status < 300 && contentType.indexOf('multipart/mixed') >= 0) {
+  if (response.status < 300 && contentType.indexOf("multipart/mixed") >= 0) {
     const boundary = getBoundary(contentType);
 
     if (!response.body) {
-      throw new Error('Malformed response');
+      throw new Error("Malformed response");
     }
 
     // For the majority of browsers with support for ReadableStream and TextDecoder

@@ -1,17 +1,18 @@
-import { multipartFetch } from './fetch-multipart/index.ts';
-import type { QueryCache } from './query-cache.ts';
-import { queryKeyFromIdAndVariables } from './query.ts';
-import { RelayIncrementalDeliveryTransformer } from './transformer.ts';
+import { multipartFetch } from "./fetch-multipart/index.ts";
+import type { QueryCache } from "./query-cache.ts";
+import { queryKeyFromIdAndVariables } from "./query.ts";
+import { RelayIncrementalDeliveryTransformer } from "./transformer.ts";
+import { debug } from "./debug.ts";
 
 import type {
   InitialIncrementalExecutionResult,
   SubsequentIncrementalExecutionResult,
-} from 'graphql';
+} from "graphql";
 import runtime, {
   type ExecuteFunction,
   type FetchFunction,
   type GraphQLResponse,
-} from 'relay-runtime';
+} from "relay-runtime";
 
 const { Network, Observable } = runtime;
 
@@ -39,13 +40,15 @@ export class RelayReplayNetwork {
     this.queryCache = queryCache;
 
     this._fetchFn = (request, variables, _cacheConfig, _uploadables) => {
-      // console.log(`starting fetch ${typeof window === "undefined" ? "in server" : "in browser"}`);
+      debug(
+        `starting fetch ${typeof window === "undefined" ? "in server" : "in browser"}`,
+      );
       // const forceFetch = cacheConfig?.force ?? false;
 
       const requestInit = {
-        method: this._fetchOpts.method ?? 'POST',
+        method: this._fetchOpts.method ?? "POST",
         headers: {
-          'content-type': 'application/mixe',
+          "content-type": "application/mixe",
           ...this._fetchOpts.headers,
         },
         body: JSON.stringify({
@@ -62,7 +65,10 @@ export class RelayReplayNetwork {
       //     ? cacheConfig.metadata.signal
       //     : undefined;
       //
-      const queryKey = queryKeyFromIdAndVariables(request.id ?? request.cacheID, variables);
+      const queryKey = queryKeyFromIdAndVariables(
+        request.id ?? request.cacheID,
+        variables,
+      );
 
       // on the server, pass the response to the replaysubject
       if (this._isServer) {
@@ -74,42 +80,48 @@ export class RelayReplayNetwork {
 
         this.queryCache.watchQuery(query.getOperation(), replaySubject);
 
-        const transformer = new RelayIncrementalDeliveryTransformer((...args) => {
-          for (const arg of args) {
-            replaySubject.next({ type: 'next', id: query.queryKey, data: arg });
-          }
-        });
-
-        multipartFetch<InitialIncrementalExecutionResult | SubsequentIncrementalExecutionResult>(
-          this._url,
-          {
-            ...requestInit,
-            onComplete: () => {
-              replaySubject.next({ type: 'complete', id: query.queryKey });
-              replaySubject.complete();
-            },
-            onError: (err) => {
-              const error = err instanceof Error ? err.message : String(err);
-              replaySubject.next({ type: 'error', id: query.queryKey, error });
-              replaySubject.error(err);
-            },
-            onNext: (value) => {
-              transformer.onNext(value);
-            },
+        const transformer = new RelayIncrementalDeliveryTransformer(
+          (...args) => {
+            for (const arg of args) {
+              replaySubject.next({
+                type: "next",
+                id: query.queryKey,
+                data: arg,
+              });
+            }
           },
         );
+
+        multipartFetch<
+          | InitialIncrementalExecutionResult
+          | SubsequentIncrementalExecutionResult
+        >(this._url, {
+          ...requestInit,
+          onComplete: () => {
+            replaySubject.next({ type: "complete", id: query.queryKey });
+            replaySubject.complete();
+          },
+          onError: (err) => {
+            const error = err instanceof Error ? err.message : String(err);
+            replaySubject.next({ type: "error", id: query.queryKey, error });
+            replaySubject.error(err);
+          },
+          onNext: (value) => {
+            transformer.onNext(value);
+          },
+        });
 
         return Observable.create<GraphQLResponse>((sink) => {
           replaySubject.subscribe({
             next: (value) => {
               switch (value.type) {
-                case 'next':
+                case "next":
                   sink.next(value.data);
                   break;
-                case 'error':
+                case "error":
                   sink.error(new Error(JSON.stringify(value.error)));
                   break;
-                case 'complete':
+                case "complete":
                   sink.complete();
                   break;
               }
@@ -127,18 +139,19 @@ export class RelayReplayNetwork {
       // if we are on the client, check to see if we have a cached response
       const query = this.queryCache.get(queryKey);
       if (query) {
-        // console.log('returning from replay');
+        // debug('returning from replay');
         return Observable.create<GraphQLResponse>((sink) => {
           return query.replaySubject.subscribe({
             next: (data) => {
               switch (data.type) {
-                case 'next':
+                case "next":
                   sink.next(data.data);
                   break;
               }
             },
             error: (err: unknown) => {
-              const error = err instanceof Error ? err : new Error(`Unknown error`);
+              const error =
+                err instanceof Error ? err : new Error(`Unknown error`);
               sink.error(error);
             },
             complete: () => {
@@ -149,26 +162,28 @@ export class RelayReplayNetwork {
         // otherwise fetch as normal
       } else {
         return Observable.create<GraphQLResponse>((sink) => {
-          const transformer = new RelayIncrementalDeliveryTransformer((...args) => {
-            for (const arg of args) {
-              sink.next(arg);
-            }
-          });
-          multipartFetch<InitialIncrementalExecutionResult | SubsequentIncrementalExecutionResult>(
-            this._url,
-            {
-              ...requestInit,
-              onComplete: () => {
-                sink.complete();
-              },
-              onError: (error) => {
-                sink.error(error);
-              },
-              onNext: (value) => {
-                transformer.onNext(value);
-              },
+          const transformer = new RelayIncrementalDeliveryTransformer(
+            (...args) => {
+              for (const arg of args) {
+                sink.next(arg);
+              }
             },
           );
+          multipartFetch<
+            | InitialIncrementalExecutionResult
+            | SubsequentIncrementalExecutionResult
+          >(this._url, {
+            ...requestInit,
+            onComplete: () => {
+              sink.complete();
+            },
+            onError: (error) => {
+              sink.error(error);
+            },
+            onNext: (value) => {
+              transformer.onNext(value);
+            },
+          });
         });
       }
     };

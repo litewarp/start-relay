@@ -1,8 +1,17 @@
-import { buildQueryKey, RelayQuery } from './query.ts';
-import { createBackpressuredCallback } from './stream-utils.ts';
-import type { QueryEvent, QueryProgressEvent, ReadableStreamRelayEvent } from './transport.ts';
+import { debug } from "./debug.ts";
+import { buildQueryKey, RelayQuery } from "./query.ts";
+import { createBackpressuredCallback } from "./stream-utils.ts";
+import type {
+  QueryEvent,
+  QueryProgressEvent,
+  ReadableStreamRelayEvent,
+} from "./transport.ts";
 
-import { Environment, ReplaySubject, type OperationDescriptor } from 'relay-runtime';
+import {
+  Environment,
+  ReplaySubject,
+  type OperationDescriptor,
+} from "relay-runtime";
 
 export const createQueryCache = (isServer?: boolean) => {
   return new QueryCache(isServer);
@@ -12,7 +21,7 @@ export class QueryCache {
   private _isServer: boolean;
   // server side subscription to requests
   watchQueryQueue = createBackpressuredCallback<{
-    event: Extract<QueryEvent, { type: 'started' }>;
+    event: Extract<QueryEvent, { type: "started" }>;
     replaySubject: ReplaySubject<QueryProgressEvent>;
   }>();
   // client side map of consumed queries
@@ -53,7 +62,7 @@ export class QueryCache {
     return this.queries.get(queryId);
   }
 
-  onQueryStarted(event: Extract<QueryEvent, { type: 'started' }>): void {
+  onQueryStarted(event: Extract<QueryEvent, { type: "started" }>): void {
     const query = this.build(event.operation);
     this.simulatedStreamingQueries.set(event.id, {
       operation: query.getOperation(),
@@ -67,14 +76,14 @@ export class QueryCache {
       throw new Error(`ReplaySubject for query with id ${event.id} not found`);
     }
     switch (event.type) {
-      case 'next':
+      case "next":
         query.replaySubject.next(event);
         break;
-      case 'error':
+      case "error":
         this.simulatedStreamingQueries.delete(event.id);
         query.replaySubject.error(new Error(JSON.stringify(event.error)));
         break;
-      case 'complete':
+      case "complete":
         this.simulatedStreamingQueries.delete(event.id);
         query.replaySubject.complete();
         break;
@@ -89,9 +98,8 @@ export class QueryCache {
   rerunSimulatedQueries = (environment: Environment) => {
     for (const [id, query] of this.simulatedStreamingQueries) {
       this.simulatedStreamingQueries.delete(id);
-      // oxlint-disable-next-line no-console
-      console.log(
-        'Streaming connection closed before server query could be fully transported, rerunning:',
+      debug(
+        "Streaming connection closed before server query could be fully transported, rerunning:",
         query.operation.request,
       );
 
@@ -99,13 +107,16 @@ export class QueryCache {
     }
   };
 
-  watchQuery(operation: OperationDescriptor, replaySubject: ReplaySubject<QueryProgressEvent>) {
+  watchQuery(
+    operation: OperationDescriptor,
+    replaySubject: ReplaySubject<QueryProgressEvent>,
+  ) {
     if (!this._isServer) {
-      throw new Error('watchQuery is not supported on the client');
+      throw new Error("watchQuery is not supported on the client");
     }
 
     if (!this.watchQueryQueue) {
-      throw new Error('watchQueryQueue is not initialized');
+      throw new Error("watchQueryQueue is not initialized");
     }
 
     const id = buildQueryKey(operation);
@@ -113,7 +124,7 @@ export class QueryCache {
     this.watchQueryQueue.push({
       event: {
         id,
-        type: 'started',
+        type: "started",
         operation,
       },
       replaySubject,
