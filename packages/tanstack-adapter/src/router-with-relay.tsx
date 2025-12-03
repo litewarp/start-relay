@@ -1,15 +1,16 @@
-import { RecordSource, type Environment } from 'relay-runtime';
+import { createPreloadedQuerySerializer } from './hydration.ts';
 import { createPreloader } from './preloaded-query.ts';
-import type { AnyRouter } from '@tanstack/react-router';
 import type { QueryCache } from './query-cache.ts';
+import { RelayProvider } from './relay-provider.tsx';
 import {
   ServerTransport,
   transportSerializationAdapter,
   type ClientTransport,
 } from './transport.ts';
-import { createPreloadedQuerySerializer } from './hydration.ts';
+
+import type { AnyRouter } from '@tanstack/react-router';
 import { Fragment } from 'react/jsx-runtime';
-import { RelayProvider } from './relay-provider.tsx';
+import { RecordSource, type Environment } from 'relay-runtime';
 
 export interface RelayRouterContext {
   environment: Environment;

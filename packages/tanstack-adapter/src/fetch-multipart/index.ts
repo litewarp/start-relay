@@ -1,5 +1,5 @@
-import { PatchResolver } from './patch-resolver.ts';
 import { observableFromStream } from '../stream-utils.ts';
+import { PatchResolver } from './patch-resolver.ts';
 
 function getBoundary(contentType = '') {
   const contentTypeParts = contentType.split(';');

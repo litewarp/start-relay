@@ -1,7 +1,8 @@
-import type { Environment } from 'relay-runtime';
+import type { QueryCache } from './query-cache.ts';
 import { ClientTransport, ServerTransport } from './transport.ts';
 import { DataTransportContext, WrapRelayProvider } from './wrap-relay-provider.tsx';
-import type { QueryCache } from './query-cache.ts';
+
+import type { Environment } from 'relay-runtime';
 
 const WrappedRelayProvider = WrapRelayProvider<{
   context: { transport: ServerTransport | ClientTransport };

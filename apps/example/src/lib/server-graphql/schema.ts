@@ -1,5 +1,8 @@
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
+
+import { alphabet } from './alphabet.ts';
+
 import {
   GraphQLDeferDirective,
   GraphQLInt,
@@ -19,7 +22,6 @@ import {
   globalIdField,
   nodeDefinitions,
 } from 'graphql-relay';
-import { alphabet } from './alphabet.ts';
 
 const { nodeInterface, nodeField } = nodeDefinitions((globalId) => {
   const { type, id } = fromGlobalId(globalId);

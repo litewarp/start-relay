@@ -1,5 +1,18 @@
 {
   "lsp": {
+    "oxc": {
+      "initialization_options": {
+        "options": {
+          "run": "onType",
+          "configPath": null,
+          "tsConfigPath": null,
+          "unusedDisableDirectives": "allow",
+          "typeAware": true,
+          "flags": {},
+          "fmt.experimental": true
+        }
+      }
+    },
     "relay": {
       "settings": {
         "rootDirectory": "./apps/example"

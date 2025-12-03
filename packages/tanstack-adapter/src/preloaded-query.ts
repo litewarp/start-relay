@@ -1,22 +1,24 @@
+import type { QueryCache } from './query-cache.ts';
+
 import type {
   EnvironmentProviderOptions,
   LoadQueryOptions,
   OperationDescriptor,
   PreloadedQuery,
 } from 'react-relay';
+import relay from 'react-relay';
 import runtime, {
   type Environment,
   type GraphQLTaggedNode,
   type OperationType,
   type VariablesOf,
 } from 'relay-runtime';
-import relay from 'react-relay';
-import type { QueryCache } from './query-cache.ts';
 
 const { getRequest, createOperationDescriptor } = runtime;
 
-export interface StreamedPreloadedQuery<TQuery extends OperationType>
-  extends PreloadedQuery<TQuery> {
+export interface StreamedPreloadedQuery<
+  TQuery extends OperationType,
+> extends PreloadedQuery<TQuery> {
   $__relay_queryRef: {
     operation: OperationDescriptor;
   };

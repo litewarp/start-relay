@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import relay from 'react-relay';
-import type { deferSlowFragment$key } from '~relay/deferSlowFragment.graphql.ts';
 import type { deferFastFragment$key } from '~relay/deferFastFragment.graphql.ts';
 import { type deferPageQuery } from '~relay/deferPageQuery.graphql.ts';
+import type { deferSlowFragment$key } from '~relay/deferSlowFragment.graphql.ts';
 
 const { graphql, useLazyLoadQuery, useFragment } = relay;
 

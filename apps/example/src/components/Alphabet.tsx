@@ -1,7 +1,7 @@
 import relay from 'react-relay';
 const { graphql, usePaginationFragment } = relay;
-import type { AlphabetFragment$key } from '~relay/AlphabetFragment.graphql.ts';
 import { Suspense, lazy } from 'react';
+import type { AlphabetFragment$key } from '~relay/AlphabetFragment.graphql.ts';
 
 const LetterEdgeComponent = lazy(() => import('./Letter.tsx'));
 

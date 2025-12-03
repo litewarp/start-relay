@@ -1,6 +1,7 @@
 import { getSchema } from '~/lib/graphql/schema.ts';
-import type { OperationType, VariablesOf } from 'relay-runtime';
+
 import { experimentalExecuteIncrementally, type DocumentNode } from 'graphql';
+import type { OperationType, VariablesOf } from 'relay-runtime';
 
 const schema = getSchema();
 

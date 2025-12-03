@@ -1,12 +1,13 @@
-/// <reference types="vite/client" />
-import { createRootRouteWithContext, HeadContent, Link, Scripts } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import type * as React from 'react';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary.tsx';
 import { NotFound } from '~/components/NotFound.tsx';
 import type { RelayRouterContext } from '~/lib/relay-streaming/router-with-relay.tsx';
 import appCss from '~/styles/app.css?url';
 import { seo } from '~/utils/seo.ts';
+
+/// <reference types="vite/client" />
+import { createRootRouteWithContext, HeadContent, Link, Scripts } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import type * as React from 'react';
 
 export const Route = createRootRouteWithContext<RelayRouterContext>()({
   head: () => ({

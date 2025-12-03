@@ -1,7 +1,8 @@
-import { type Environment, type OperationType } from 'relay-runtime';
-import { createSerializationAdapter } from '@tanstack/react-router';
 import type { StreamedPreloadedQuery } from './preloaded-query.ts';
 import { QueryCache } from './query-cache.ts';
+
+import { createSerializationAdapter } from '@tanstack/react-router';
+import { type Environment, type OperationType } from 'relay-runtime';
 
 const dehydratedOmittedKeys = new Set([
   'dispose',

@@ -1,5 +1,10 @@
-import { executeQuery } from './schema-setup.ts';
+import syncFs, { promises as fs } from 'node:fs';
+
 import { PatchResolver } from '~/lib/fetch-multipart/patch-resolver.ts';
+import { RelayIncrementalDeliveryTransformer } from '~/lib/relay/transformer.ts';
+
+import { executeQuery } from './schema-setup.ts';
+
 import {
   parse,
   type DocumentNode,
@@ -7,8 +12,6 @@ import {
   type SubsequentIncrementalExecutionResult,
 } from 'graphql';
 import type { Variables } from 'relay-runtime';
-import { RelayIncrementalDeliveryTransformer } from '~/lib/relay/transformer.ts';
-import syncFs, { promises as fs } from 'node:fs';
 
 const req = {
   id: null,

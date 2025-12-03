@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
-import relay from 'react-relay';
-import { type streamQuery } from '~relay/streamQuery.graphql.ts';
-import type { streamAlphabet_Query$key } from '~relay/streamAlphabet_Query.graphql.ts';
 import { Suspense } from 'react';
+import relay from 'react-relay';
+import type { streamAlphabet_Query$key } from '~relay/streamAlphabet_Query.graphql.ts';
+import { type streamQuery } from '~relay/streamQuery.graphql.ts';
 
 const { useLazyLoadQuery, graphql, useFragment } = relay;
 

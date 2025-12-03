@@ -1,10 +1,12 @@
+import { Readable } from 'node:stream';
+
+import { graphql } from './executor.ts';
+import { getSchema } from './schema.ts';
+
 import type {
   InitialIncrementalExecutionResult,
   SubsequentIncrementalExecutionResult,
 } from 'graphql';
-import { graphql } from './executor.ts';
-import { getSchema } from './schema.ts';
-import { Readable } from 'node:stream';
 
 const schema = getSchema();
 

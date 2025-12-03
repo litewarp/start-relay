@@ -1,7 +1,8 @@
-import { Environment, ReplaySubject, type OperationDescriptor } from 'relay-runtime';
 import { buildQueryKey, RelayQuery } from './query.ts';
 import { createBackpressuredCallback } from './stream-utils.ts';
 import type { QueryEvent, QueryProgressEvent, ReadableStreamRelayEvent } from './transport.ts';
+
+import { Environment, ReplaySubject, type OperationDescriptor } from 'relay-runtime';
 
 export const createQueryCache = (isServer?: boolean) => {
   return new QueryCache(isServer);

@@ -1,6 +1,7 @@
+import type { QueryProgressEvent } from './transport.ts';
+
 import runtime from 'relay-runtime';
 import type { OperationDescriptor, ReplaySubject } from 'relay-runtime';
-import type { QueryProgressEvent } from './transport.ts';
 
 export function queryKeyFromIdAndVariables(id: string, variables: Record<string, any>): string {
   return `${id}:${JSON.stringify(variables)}`;

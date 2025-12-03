@@ -1,8 +1,9 @@
-import { createSerializationAdapter } from '@tanstack/react-router';
-import type { ReplaySubject } from 'relay-runtime';
 import { observableFromStream } from './stream-utils.ts';
 import type { DataTransportContext } from './wrap-relay-provider.tsx';
+
+import { createSerializationAdapter } from '@tanstack/react-router';
 import { useEffect, useId, useRef, type Context, type RefObject } from 'react';
+import type { ReplaySubject } from 'relay-runtime';
 import type { GraphQLResponse, OperationDescriptor } from 'relay-runtime';
 
 export type ReadableStreamRelayEvent<T extends GraphQLResponse = GraphQLResponse> =
