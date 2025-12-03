@@ -1,0 +1,204 @@
+{
+  "fragment": {
+    "kind": "SingularReaderSelector",
+    "dataID": "client:root",
+    "isWithinUnmatchedTypeRefinement": false,
+    "clientEdgeTraversalPath": null,
+    "node": {
+      "argumentDefinitions": [],
+      "kind": "Fragment",
+      "metadata": null,
+      "name": "deferPageQuery",
+      "selections": [
+        { "args": null, "kind": "FragmentSpread", "name": "deferFastFragment" },
+        {
+          "kind": "Defer",
+          "selections": [
+            {
+              "args": null,
+              "kind": "FragmentSpread",
+              "name": "deferSlowFragment"
+            }
+          ]
+        }
+      ],
+      "type": "Query",
+      "abstractKey": null
+    },
+    "variables": {},
+    "owner": {
+      "identifier": "f104fda8dcbbc4e6f93a4fde4379b4e4{}",
+      "node": {
+        "fragment": {
+          "argumentDefinitions": [],
+          "kind": "Fragment",
+          "metadata": null,
+          "name": "deferPageQuery",
+          "selections": [
+            {
+              "args": null,
+              "kind": "FragmentSpread",
+              "name": "deferFastFragment"
+            },
+            {
+              "kind": "Defer",
+              "selections": [
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "deferSlowFragment"
+                }
+              ]
+            }
+          ],
+          "type": "Query",
+          "abstractKey": null
+        },
+        "kind": "Request",
+        "operation": {
+          "argumentDefinitions": [],
+          "kind": "Operation",
+          "name": "deferPageQuery",
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "fastField",
+              "storageKey": null
+            },
+            {
+              "if": null,
+              "kind": "Defer",
+              "label": "deferPageQuery$defer$deferSlowFragment",
+              "selections": [
+                {
+                  "alias": null,
+                  "args": [
+                    { "kind": "Literal", "name": "waitFor", "value": 5000 }
+                  ],
+                  "kind": "ScalarField",
+                  "name": "slowField",
+                  "storageKey": "slowField(waitFor:5000)"
+                }
+              ]
+            }
+          ]
+        },
+        "params": {
+          "cacheID": "f104fda8dcbbc4e6f93a4fde4379b4e4",
+          "id": null,
+          "metadata": {},
+          "name": "deferPageQuery",
+          "operationKind": "query",
+          "text": "query deferPageQuery {\n  ...deferFastFragment\n  ...deferSlowFragment @defer(label: \"deferPageQuery$defer$deferSlowFragment\", if: true)\n}\n\nfragment deferFastFragment on Query {\n  fastField\n}\n\nfragment deferSlowFragment on Query {\n  slowField(waitFor: 5000)\n}\n"
+        },
+        "hash": "6fe5c04fba0a181250c8df9fac091197"
+      },
+      "variables": {}
+    }
+  },
+  "request": {
+    "identifier": "f104fda8dcbbc4e6f93a4fde4379b4e4{}",
+    "node": {
+      "fragment": {
+        "argumentDefinitions": [],
+        "kind": "Fragment",
+        "metadata": null,
+        "name": "deferPageQuery",
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "deferFastFragment"
+          },
+          {
+            "kind": "Defer",
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "deferSlowFragment"
+              }
+            ]
+          }
+        ],
+        "type": "Query",
+        "abstractKey": null
+      },
+      "kind": "Request",
+      "operation": {
+        "argumentDefinitions": [],
+        "kind": "Operation",
+        "name": "deferPageQuery",
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "fastField",
+            "storageKey": null
+          },
+          {
+            "if": null,
+            "kind": "Defer",
+            "label": "deferPageQuery$defer$deferSlowFragment",
+            "selections": [
+              {
+                "alias": null,
+                "args": [
+                  { "kind": "Literal", "name": "waitFor", "value": 5000 }
+                ],
+                "kind": "ScalarField",
+                "name": "slowField",
+                "storageKey": "slowField(waitFor:5000)"
+              }
+            ]
+          }
+        ]
+      },
+      "params": {
+        "cacheID": "f104fda8dcbbc4e6f93a4fde4379b4e4",
+        "id": null,
+        "metadata": {},
+        "name": "deferPageQuery",
+        "operationKind": "query",
+        "text": "query deferPageQuery {\n  ...deferFastFragment\n  ...deferSlowFragment @defer(label: \"deferPageQuery$defer$deferSlowFragment\", if: true)\n}\n\nfragment deferFastFragment on Query {\n  fastField\n}\n\nfragment deferSlowFragment on Query {\n  slowField(waitFor: 5000)\n}\n"
+      },
+      "hash": "6fe5c04fba0a181250c8df9fac091197"
+    },
+    "variables": {}
+  },
+  "root": {
+    "dataID": "client:root",
+    "node": {
+      "argumentDefinitions": [],
+      "kind": "Operation",
+      "name": "deferPageQuery",
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "fastField",
+          "storageKey": null
+        },
+        {
+          "if": null,
+          "kind": "Defer",
+          "label": "deferPageQuery$defer$deferSlowFragment",
+          "selections": [
+            {
+              "alias": null,
+              "args": [{ "kind": "Literal", "name": "waitFor", "value": 5000 }],
+              "kind": "ScalarField",
+              "name": "slowField",
+              "storageKey": "slowField(waitFor:5000)"
+            }
+          ]
+        }
+      ]
+    },
+    "variables": {}
+  }
+}
